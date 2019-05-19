@@ -33,7 +33,7 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 ##### Non-Goals
 Skycloset is a small project for Demoday of CEOS, so it has limited manpower and time. In order to fully implement the features required to run the app under these conditions, it explicitly does not attempt to:
 * Supports **IOS** environments; Doing so is entirely possible, but complicates things.
-* Support **pre-JellyBean** devices. React Native apps target iOS 9.0 and Android 4.1 (API 16) or newer.
+* Support **pre-JellyBean** devices; React Native apps target iOS 9.0 and Android 4.1 (API 16) or newer.
 
 
 ### License
