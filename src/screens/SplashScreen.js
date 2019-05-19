@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
-import {View, AsyncStorage, StyleSheet, Text, Image} from 'react-native';
+import {View, AsyncStorage, StyleSheet, Text, Image, Animated} from 'react-native';
 
 export default class SplashScreen extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         //this._bootstrapAsync();
+        this.state = {
+            bg: new Animated.ValueXY({x:193, y:222})
+        };
+    }
+
+    componentWillMount() {
+        this.animatedValue = new Animated.Value(0);
     }
 
     performTimeConsumingTask = async() => {
@@ -17,6 +24,10 @@ export default class SplashScreen extends Component {
     }
 
     async componentDidMount() {
+        Animated.timing(this.animatedValue, {
+            toValue: 150,
+            duration: 1500
+        }).start();
         const data = await this.performTimeConsumingTask();
         if(data!==null) {
             //this.props.navigation.navigate('App');
@@ -29,8 +40,15 @@ export default class SplashScreen extends Component {
     };
 
     render() {
+        const interpolateColor = this.animatedValue.interpolate({
+            inputRange: [0, 150],
+            outputRange: ['rgb(0, 193, 222)', 'rgb(255, 255, 255)']
+        })
+        const animiatedStyle = {
+            backgroundColor: interpolateColor
+        }
         return (
-            <View style={styles.container}>
+            <Animated.View style={[styles.container, animiatedStyle]}>
                 <View style={styles.logoContainer}>
                     <Image
                         style={{width: 128, height:128}}
@@ -42,7 +60,7 @@ export default class SplashScreen extends Component {
                         SKY CLOSET
                     </Text>
                 </View>
-            </View>
+            </Animated.View>
         );
     }
 }
