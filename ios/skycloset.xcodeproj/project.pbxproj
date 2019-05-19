@@ -41,6 +41,8 @@
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 		062A029E260448AB8BDA8E4C /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A72475BD27468C85815730 /* libRNGestureHandler.a */; };
 		CD5481B87531476D98072A68 /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CC80C5FAA17478BA38F0F9C /* libRNGestureHandler-tvOS.a */; };
+		2BEA52E612C346C197A59D77 /* LogoENG-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 32ACF69ED43E4BEFA9E2B8EC /* LogoENG-Medium.otf */; };
+		070478A4CC494B71ADE1FF95 /* LogoKOR-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = AC491D2A79114F9783926CCB /* LogoKOR-Medium.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -351,6 +353,8 @@
 		539089312F424E01AD64AAC9 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; name = "RNGestureHandler.xcodeproj"; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		41A72475BD27468C85815730 /* libRNGestureHandler.a */ = {isa = PBXFileReference; name = "libRNGestureHandler.a"; path = "libRNGestureHandler.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		7CC80C5FAA17478BA38F0F9C /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; name = "libRNGestureHandler-tvOS.a"; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		32ACF69ED43E4BEFA9E2B8EC /* LogoENG-Medium.otf */ = {isa = PBXFileReference; name = "LogoENG-Medium.otf"; path = "../src/assets/fonts/LogoENG-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		AC491D2A79114F9783926CCB /* LogoKOR-Medium.otf */ = {isa = PBXFileReference; name = "LogoKOR-Medium.otf"; path = "../src/assets/fonts/LogoKOR-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -592,6 +596,7 @@
 				00E356EF1AD99517003FC87E /* skyclosetTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				EEDBCC3F52E9497287D840BF /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -617,6 +622,16 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		EEDBCC3F52E9497287D840BF /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				32ACF69ED43E4BEFA9E2B8EC /* LogoENG-Medium.otf */,
+				AC491D2A79114F9783926CCB /* LogoKOR-Medium.otf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -1064,6 +1079,8 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				2BEA52E612C346C197A59D77 /* LogoENG-Medium.otf in Resources */,
+				070478A4CC494B71ADE1FF95 /* LogoKOR-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
