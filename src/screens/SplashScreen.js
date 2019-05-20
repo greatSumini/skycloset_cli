@@ -6,7 +6,7 @@ export default class SplashScreen extends Component {
         super(props);
         //this._bootstrapAsync();
         this.state = {
-            bg: new Animated.ValueXY({x:193, y:222})
+            logoOp : new Animated.Value(0),
         };
     }
 
@@ -24,13 +24,30 @@ export default class SplashScreen extends Component {
     }
 
     async componentDidMount() {
+        this._logoFadeIn();
         Animated.timing(this.animatedValue, {
             toValue: 150,
-            duration: 1500
+            duration: 700,
+            delay:800,
         }).start();
         const data = await this.performTimeConsumingTask();
         if(data!==null) {
             //this.props.navigation.navigate('App');
+        }
+    }
+
+    _logoFadeIn() {
+        Animated.timing(this.state.logoOp, {
+            toValue: 1,
+            duration: 300,
+            delay:200,
+        }).start();
+    }
+
+    _getLogoStyle() {
+        return {
+            width: 128, height:128,
+            opacity: this.state.logoOp,
         }
     }
 
@@ -50,8 +67,8 @@ export default class SplashScreen extends Component {
         return (
             <Animated.View style={[styles.container, animiatedStyle]}>
                 <View style={styles.logoContainer}>
-                    <Image
-                        style={{width: 128, height:128}}
+                    <Animated.Image
+                        style={this._getLogoStyle()}
                         source={require('../assets/images/logo.png')}
                     />
                 </View>
