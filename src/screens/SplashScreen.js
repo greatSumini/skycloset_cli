@@ -1,18 +1,17 @@
 import React, {Component} from 'react';
 import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
+import {connect} from 'react-redux';
 
-export default class SplashScreen extends Component {
-    constructor(props) {
-        super(props);
-        //this._bootstrapAsync();
-        this.state = {
-            userLocation: {},
-            logoOp : new Animated.Value(0),
-        };
+import {setLocation, setAddress, setWeather} from '../store/actions/index';
+import {googleMapsKey, openWeatherKey} from '../../config/keys';
+
+class SplashScreen extends Component {
+    state_loc = {
+        logoOp : new Animated.Value(0),
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         this.animatedValue = new Animated.Value(0);
     }
 
@@ -26,17 +25,17 @@ export default class SplashScreen extends Component {
     }
 
     async componentDidMount() {
-        const {userLocation} = this.state;
         this._logoFadeIn();
         Animated.timing(this.animatedValue, {
             toValue: 150,
             duration: 400,
             delay:800,
         }).start();
-        const loc = await this.getLocation();
+        const loc = this.getLocation();
+        //const addr = this.getAddressFromGoogleApi();
         const data = await this.performTimeConsumingTask();
         if(data!==null&&loc!==null) {
-            this.props.navigation.navigate('App', {location:userLocation});
+            this.props.navigation.navigate('App');
         }
     }
 
@@ -45,7 +44,9 @@ export default class SplashScreen extends Component {
         if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
             Geolocation.getCurrentPosition(
                 (position) => {
-                    this.setState({userLocation: position.coords});
+                    this.props.onSetLocation(position.coords);
+                    this.getAddressFromGoogleApi();
+                    this._getWeather();
                 },
                 (error) => {
                     console.log(error.code, error.message);
@@ -56,9 +57,40 @@ export default class SplashScreen extends Component {
         }
         return null;
     }
+    
+
+    async getAddressFromGoogleApi() {
+        const api = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
+        const latitude = this.props.location.latitude;
+        const longitude = this.props.location.longitude;
+        console.log(googleMapsKey);
+        let apiRequestUrl = api + latitude + ',' + longitude + '&key=' + googleMapsKey;
+
+        try {
+            let response = await fetch(apiRequestUrl);
+            let responseJson = await response.json();
+            this.props.onSetAddress(responseJson);
+            console.log(responseJson);
+            return responseJson;
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+
+    _getWeather = () => {
+        latitude = this.props.location.latitude;
+        longitude = this.props.location.longitude;
+        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`)
+            .then(response => response.json()) // 응답값을 json으로 변환
+            .then(json => {
+                this.props.onSetWeather(json);
+            }
+        );
+    }
 
     _logoFadeIn() {
-        Animated.timing(this.state.logoOp, {
+        Animated.timing(this.state_loc.logoOp, {
             toValue: 1,
             duration: 300,
             delay:200,
@@ -68,7 +100,7 @@ export default class SplashScreen extends Component {
     _getLogoStyle() {
         return {
             width: 128, height:128,
-            opacity: this.state.logoOp,
+            opacity: this.state_loc.logoOp,
         }
     }
 
@@ -125,3 +157,21 @@ const styles = StyleSheet.create({
         color : '#00C1DE',
     },
 });
+
+const mapStateToProps = state => {
+    return {
+        location: state.geoloc.location,
+        address: state.geoloc.address,
+        weather: state.weather.weather,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetLocation: (location) => dispatch(setLocation(location)),
+        onSetAddress : (address) => dispatch(setAddress(address)),
+        onSetWeather : (weather) => dispatch(setWeather(weather)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
