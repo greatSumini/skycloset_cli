@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {View, AsyncStorage, StyleSheet, Text, Image, Animated} from 'react-native';
+import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from 'react-native';
+import Geolocation from 'react-native-geolocation-service';
 
 export default class SplashScreen extends Component {
     constructor(props) {
         super(props);
         //this._bootstrapAsync();
         this.state = {
+            userLocation: {},
             logoOp : new Animated.Value(0),
         };
     }
@@ -24,16 +26,35 @@ export default class SplashScreen extends Component {
     }
 
     async componentDidMount() {
+        const {userLocation} = this.state;
         this._logoFadeIn();
         Animated.timing(this.animatedValue, {
             toValue: 150,
-            duration: 700,
+            duration: 400,
             delay:800,
         }).start();
+        const loc = await this.getLocation();
         const data = await this.performTimeConsumingTask();
-        if(data!==null) {
-            //this.props.navigation.navigate('App');
+        if(data!==null&&loc!==null) {
+            this.props.navigation.navigate('App', {location:userLocation});
         }
+    }
+
+    async getLocation() {
+        const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
+            Geolocation.getCurrentPosition(
+                (position) => {
+                    this.setState({userLocation: position.coords});
+                },
+                (error) => {
+                    console.log(error.code, error.message);
+                },
+                {enableHighAccuracy:true, timeout:15000, maximumAge:10000}
+            );
+            return LocationPermission;
+        }
+        return null;
     }
 
     _logoFadeIn() {

@@ -12,7 +12,8 @@
     "react-native": "0.59.8",
     "react-native-geolocation-service": "^2.0.1",
     "react-native-gesture-handler": "^1.2.1",
-    "react-navigation": "^3.11.0"
+    "react-navigation": "^3.11.0",
+    "react-redux": "^7.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",

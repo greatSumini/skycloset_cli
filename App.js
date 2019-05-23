@@ -1,4 +1,4 @@
-import { createSwitchNavigator, createStackNavigator, createBottomTabNavigator, createAppContainer } from "react-navigation";
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from "react-navigation";
 
 import HomeScreen from './src/screens/HomeScreen';
 
@@ -10,10 +10,8 @@ const AuthStack = createStackNavigator({
   SignIn: SignInScreen 
 });
 
-const AppStack = createBottomTabNavigator({
-  Home: {
-    screen: HomeScreen
-  }
+const AppStack = createSwitchNavigator({
+  Home: HomeScreen
 });
 
 export default createAppContainer(createSwitchNavigator(
