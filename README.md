@@ -35,6 +35,11 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 2. [react-native-geolocation-service](https://github.com/Agontuk/react-native-geolocation-service)
 
 
+### API services
+1. [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/start)
+2. [OpenWeatherMap - Current weather data](https://openweathermap.org/current)
+
+
 ### Non-Goals
 Skycloset is a small project for Demoday of CEOS, so it has limited manpower and time. In order to fully implement the features required to run the app under these conditions, it explicitly does not attempt to:
 * Supports **IOS** environments; Doing so is entirely possible, but complicates things.
