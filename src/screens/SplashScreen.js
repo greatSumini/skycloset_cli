@@ -3,7 +3,7 @@ import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from
 import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 
-import {setLocation, setAddress, setWeather} from '../store/actions/index';
+import {setLocation, setAddress, setWeather, setForecast, setPastWeather} from '../store/actions/index';
 import {googleMapsKey, openWeatherKey} from '../../config/keys';
 
 class SplashScreen extends Component {
@@ -13,13 +13,14 @@ class SplashScreen extends Component {
 
     async componentWillMount() {
         this.animatedValue = new Animated.Value(0);
+        this.getLocation();
     }
 
     performTimeConsumingTask = async() => {
         return new Promise((resolve) =>
             setTimeout (
                 () => {resolve('result')},
-                2000
+                2500
             )    
         );
     }
@@ -31,10 +32,12 @@ class SplashScreen extends Component {
             duration: 400,
             delay:800,
         }).start();
-        const loc = this.getLocation();
+        
+        //this.getAddressFromGoogleApi();
+        //this._getWeather();
         //const addr = this.getAddressFromGoogleApi();
         const data = await this.performTimeConsumingTask();
-        if(data!==null&&loc!==null) {
+        if(data!==null) {
             this.props.navigation.navigate('App');
         }
     }
@@ -47,13 +50,13 @@ class SplashScreen extends Component {
                     this.props.onSetLocation(position.coords);
                     this.getAddressFromGoogleApi();
                     this._getWeather();
+                    return LocationPermission;
                 },
                 (error) => {
                     console.log(error.code, error.message);
                 },
                 {enableHighAccuracy:true, timeout:15000, maximumAge:10000}
             );
-            return LocationPermission;
         }
         return null;
     }
@@ -64,12 +67,12 @@ class SplashScreen extends Component {
         const latitude = this.props.location.latitude;
         const longitude = this.props.location.longitude;
         console.log(googleMapsKey);
-        let apiRequestUrl = api + latitude + ',' + longitude + '&key=' + googleMapsKey;
+        let apiRequestUrl = api + latitude + ',' + longitude + '&language=ko&key=' + googleMapsKey;
 
         try {
             let response = await fetch(apiRequestUrl);
             let responseJson = await response.json();
-            this.props.onSetAddress(responseJson);
+            this.props.onSetAddress(responseJson.results[0].address_components);
             console.log(responseJson);
             return responseJson;
         }
@@ -81,12 +84,26 @@ class SplashScreen extends Component {
     _getWeather = () => {
         latitude = this.props.location.latitude;
         longitude = this.props.location.longitude;
+        endTime = Math.floor(new Date().getTime / 1000);
+        startTime = endTime - 86400;
+        
         fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`)
             .then(response => response.json()) // 응답값을 json으로 변환
             .then(json => {
                 this.props.onSetWeather(json);
-            }
-        );
+            })
+            .then(fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`)
+                .then(response2 => response2.json()) // 응답값을 json으로 변환
+                .then(json2 => {
+                    this.props.onSetForecast(json2);
+                })
+            )
+            /*.then(fetch(`http://api.weatherplanet.co.kr/weather/yesterday?version=version&lat=${latitude}&lon=${longitude}&isTimeRange=Y`)
+                .then(response3 => response3.json()) // 응답값을 json으로 변환
+                ;l'.then(json3 => {
+                    this.props.onSetPastWeather(json3);
+                })
+            )*/;
     }
 
     _logoFadeIn() {
@@ -126,7 +143,10 @@ class SplashScreen extends Component {
                     />
                 </View>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.titleText}>
+                    <Text style={styles.titleTextKOR}>
+                        하늘 옷장
+                    </Text>
+                    <Text style={styles.titleTextENG}>
                         SKY CLOSET
                     </Text>
                 </View>
@@ -151,7 +171,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    titleText: {
+    titleTextKOR: {
+        fontSize : 23,
+        fontFamily : "LogoKOR-Medium",
+        color : '#00C1DE',
+        marginBottom : 10,
+    },
+    titleTextENG: {
         fontSize : 20,
         fontFamily : "LogoENG-Medium",
         color : '#00C1DE',
@@ -163,6 +189,8 @@ const mapStateToProps = state => {
         location: state.geoloc.location,
         address: state.geoloc.address,
         weather: state.weather.weather,
+        forecast: state.weather.forecast,
+        pastWeahter : state.weather.pastWeahter,
     };
 };
 
@@ -171,7 +199,10 @@ const mapDispatchToProps = dispatch => {
         onSetLocation: (location) => dispatch(setLocation(location)),
         onSetAddress : (address) => dispatch(setAddress(address)),
         onSetWeather : (weather) => dispatch(setWeather(weather)),
+        onSetForecast : (forecast) => dispatch(setForecast(forecast)),
+        onSetPastWeather : (pastWeahter) => dispatch(setPastWeather(pastWeahter)),
     };
 };
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);

@@ -1,2 +1,2 @@
 export {setLocation, setAddress} from './geoloc'
-export {setWeather} from './weather'
+export {setWeather, setForecast, setPastWeather} from './weather'

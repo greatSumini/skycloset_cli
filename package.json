@@ -10,8 +10,10 @@
   "dependencies": {
     "react": "16.8.3",
     "react-native": "0.59.8",
+    "react-native-drawer": "^2.5.1",
     "react-native-geolocation-service": "^2.0.1",
     "react-native-gesture-handler": "^1.2.1",
+    "react-native-linear-gradient": "^2.5.4",
     "react-navigation": "^3.11.0",
     "react-redux": "^7.0.3",
     "redux": "^4.0.1"
