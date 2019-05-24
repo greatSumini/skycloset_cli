@@ -16,7 +16,9 @@ export default class HomeHead extends Component {
                 <Text style={styles.titletText}>
                     {address}
                 </Text>
-                <View style={styles.menuButton}/>
+                <View style={styles.menuButton}>
+                    <Text>　</Text>
+                </View>
             </View>
         );
     }
@@ -24,15 +26,16 @@ export default class HomeHead extends Component {
 
 const styles = StyleSheet.create({
     container : {
-        width:"90%",
+        width:"100%",
         flexDirection : "row",
         alignItems : "center",
+        marginBottom: "1%",
     },
     menuButton : {
-        width:"10%",
+        flex:1,
     },
     titletText : {
-        width:"70%",
+        flex:7,
         fontSize : 20,
         textAlign : 'center',
         fontFamily : "Bongodik",

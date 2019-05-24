@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import {StyleSheet, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 
 import Drawer from 'react-native-drawer'
@@ -8,6 +8,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import DrawerPanel from '../components/DrawerPanel'
 import HomeHead from '../components/HomeHead'
 import WeatherInfo from '../components/WeatherInfo'
+import Closet from '../components/Closet'
 
 class HomeScreen extends Component {
     state = {
@@ -41,7 +42,6 @@ class HomeScreen extends Component {
     render() {
         const {address, tempNow, tempMax, tempMin, weatherId, weatherCondition} = this.state;
         return (
-            <LinearGradient colors={['#355DA2', '#FF9500']} style={styles.linearGradient}>
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
                     content={<DrawerPanel />}
@@ -49,35 +49,43 @@ class HomeScreen extends Component {
                     tapToClose={true}
                     >
                     <ScrollView style={styles.container}>
-                        <HomeHead
-                            style={styles.homeHead}
-                            address={address}
-                            onButtonPressed={this.openDrawer}
-                        />
-                        <WeatherInfo 
-                            style={styles.weatherInfo}
-                            tempNow={tempNow} 
-                            tempMin={tempMin} 
-                            tempMax={tempMax}
-                            weaterId={weatherId}
-                            weatherCondition={weatherCondition}
-                        />
+                        <LinearGradient colors={['#00397B', '#CF8827']} style={styles.linearGradient}>
+                            <View style={styles.wrapper}>
+                                <HomeHead
+                                    style={styles.homeHead}
+                                    address={address}
+                                    onButtonPressed={this.openDrawer}
+                                />
+                                <WeatherInfo 
+                                    tempNow={tempNow} 
+                                    tempMin={tempMin} 
+                                    tempMax={tempMax}
+                                    weaterId={weatherId}
+                                    weatherCondition={weatherCondition}
+                                />
+                                <Closet
+                                    style={{width:"100%"}}
+                                />
+                                <Text>fdsdsf</Text>
+                                <Text>fdsdsf</Text>
+                                <Text>fdsdsf</Text>
+                                <Text>fdsdsf</Text>
+                            </View>
+                        </LinearGradient>
                     </ScrollView>
                 </Drawer>
-            </LinearGradient>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    linearGradient : {
-        flex:1,
-    },
-    container : {
+    wrapper : {
         paddingTop : "8%",
         paddingLeft : "5%",
         paddingRight : "5%",
-        flex:1,
+    },
+    container : {
+        height:"150%",
     },
     homeHead : {
         height: "15%",

@@ -31,12 +31,14 @@ export default class WeatherCondition extends Component {
                     style={styles.icon}
                     source={icon}
                 />
-                <Text style={styles.condition}>
-                    구름 조금
-                </Text>
-                <Text style={styles.diff}>
-                    어제보다 {tempDiff}℃
-                </Text>
+                <View style={styles.textContainer}>
+                    <Text style={styles.condition}>
+                        구름많음
+                    </Text>
+                    <Text style={styles.diff}>
+                        어제보다 {tempDiff}℃
+                    </Text>
+                </View>
             </View>
         );
     }
@@ -45,22 +47,27 @@ export default class WeatherCondition extends Component {
 const styles = StyleSheet.create({
     container : {
         paddingLeft : "5%",
-        paddingLeft : "7%",
-        borderRightWidth : 2,
+        paddingRight : "7%",
+        borderRightWidth : 1,
         borderRightColor : 'white',
         flexDirection:'row',
         alignItems : 'center',
     },
+    textContainer : {
+        flexDirection: 'column'
+    },
     condition : {
-        fontSize : 15,
+        fontSize : 16,
         color : 'white',
+        marginBottom : "10%",
     },
     diff : {
-        fontSize : 10,
+        fontSize : 12,
         color : 'white',
     },
     icon : {
         height: 70,
         width : 70,
+        marginRight:"7%",
     }
 });

@@ -32,14 +32,13 @@ export default class WeatherInfo extends Component {
 
 const styles = StyleSheet.create({
    container : {
-        width:"90%",
-        justifyContent: 'flex-start',
         alignItems: 'center',
+        justifyContent : 'center',
    },
    tempNowStyle : {
         paddingTop : 5,
         paddingBottom : 5,
-        fontSize : 25,
+        fontSize : 35,
         color : 'white',
    },
    tempMinMaxStyle : {
@@ -49,18 +48,21 @@ const styles = StyleSheet.create({
         color : 'white',
    },
    conditionContainer : {
+        flex:1,
+        width:"100%",
         flexDirection : 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop : "8%",
+        marginLeft : "10%",
+        marginTop : "4%",
    },
    weatherCondition : {
-        flex : 1,
+        flex:6,
         flexDirection : 'row',
         justifyContent: 'flex-start',
    },
    dustCondition : {
-        flex : 1,
+        flex : 4,
         flexDirection : 'row',
         justifyContent: 'flex-start',
    },

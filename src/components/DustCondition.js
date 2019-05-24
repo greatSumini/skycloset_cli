@@ -1,18 +1,14 @@
 import React, {Component} from 'react'
-import {Image, View, Text, StyleSheet} from 'react-native'
+import {View, StyleSheet} from 'react-native'
+
+import DustConditionItem from './DustConditionItem'
 
 export default class DustCondition extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Image
-                />
-                <Text>
-                    미세먼지
-                </Text>
-                <Text>
-                    매우좋음
-                </Text>
+                <DustConditionItem name='미세' condition='나쁨'/>
+                <DustConditionItem name='초미세' condition='나쁨'/>
             </View>
         );
     }
@@ -20,6 +16,6 @@ export default class DustCondition extends Component {
 
 const styles = StyleSheet.create({
     container : {
-
+        marginLeft : "3%",
     },
 });
