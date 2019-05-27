@@ -1,9 +1,16 @@
-import {SET_LOCATION, SET_ADDRESS} from './actionTypes';
+import {SET_LATITUDE, SET_LONGITUDE, SET_ADDRESS} from './actionTypes';
 
-export const setLocation = (location) => {
+export const setLatitude = (latitude) => {
     return {
-        type: SET_LOCATION,
-        location : location,
+        type: SET_LATITUDE,
+        latitude : latitude,
+    };
+}
+
+export const setLongitude = (longitude) => {
+    return {
+        type: SET_LONGITUDE,
+        longitude : longitude,
     };
 }
 

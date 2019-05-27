@@ -1,16 +1,22 @@
-import {SET_LOCATION, SET_ADDRESS} from '../actions/actionTypes'
+import {SET_LATITUDE, SET_LONGITUDE, SET_ADDRESS} from '../actions/actionTypes'
 
 const initialState = {
-    location: {},
-    address: {},
+    latitude : 0,
+    longitude : 0,
+    address : '',
 }
 
 const reducer = (state = initialState, action) => {
     switch(action.type) {
-        case SET_LOCATION :
+        case SET_LATITUDE :
             return {
                 ...state,
-                location : action.location,
+                latitude : action.latitude,
+            };
+        case SET_LONGITUDE :
+            return {
+                ...state,
+                longitude : action.longitude,
             };
         case SET_ADDRESS :
             return {

@@ -8,6 +8,8 @@ export default class Closet extends Component {
         return (
             <ImageBackground source={require('../assets/images/closet/closet_sunmove.png')} style={styles.imgbg}>
                 <Cloth />
+                <Cloth />
+                <Cloth />
             </ImageBackground>
         );
     }
@@ -18,7 +20,8 @@ const styles = StyleSheet.create({
         paddingTop:25,
         paddingLeft:10,
         marginTop:45,
-        width:"100%",
+        width:"101.34%",
         height:685,
+        flexDirection:'row',
     }
 })

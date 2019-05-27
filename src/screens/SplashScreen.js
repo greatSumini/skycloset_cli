@@ -3,8 +3,8 @@ import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from
 import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 
-import {setLocation, setAddress, setWeather, setForecast, setPastWeather} from '../store/actions/index';
-import {googleMapsKey, openWeatherKey} from '../../config/keys';
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather} from '../store/actions/index';
+import {googleMapsKey, darkSkyKey} from '../../config/keys';
 
 class SplashScreen extends Component {
     state_loc = {
@@ -47,7 +47,8 @@ class SplashScreen extends Component {
         if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
             Geolocation.getCurrentPosition(
                 (position) => {
-                    this.props.onSetLocation(position.coords);
+                    this.props.onSetLatitude(position.coords.latitude);
+                    this.props.onSetLongitude(position.coords.longitude);
                     this.getAddressFromGoogleApi();
                     this._getWeather();
                     return LocationPermission;
@@ -64,15 +65,16 @@ class SplashScreen extends Component {
 
     async getAddressFromGoogleApi() {
         const api = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
-        const latitude = this.props.location.latitude;
-        const longitude = this.props.location.longitude;
+        const latitude = this.props.latitude;
+        const longitude = this.props.longitude;
         console.log(googleMapsKey);
         let apiRequestUrl = api + latitude + ',' + longitude + '&language=ko&key=' + googleMapsKey;
 
         try {
             let response = await fetch(apiRequestUrl);
             let responseJson = await response.json();
-            this.props.onSetAddress(responseJson.results[0].address_components);
+            const address =  responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name
+            this.props.onSetAddress(address);
             console.log(responseJson);
             return responseJson;
         }
@@ -82,20 +84,60 @@ class SplashScreen extends Component {
     }
 
     _getWeather = () => {
-        latitude = this.props.location.latitude;
-        longitude = this.props.location.longitude;
-        endTime = Math.floor(new Date().getTime / 1000);
-        startTime = endTime - 86400;
+        latitude = this.props.latitude;
+        longitude = this.props.longitude;
+        todayTime = Math.floor(new Date().getTime() / 1000);
+        yesterTime = todayTime - 86400;
         
-        fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`)
+        fetch(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude}?exclude=minutely,alerts,flags&units=si`)
             .then(response => response.json()) // 응답값을 json으로 변환
             .then(json => {
-                this.props.onSetWeather(json);
+                this.props.onSetCurrentWeather({
+                    currentTemp :json.currently.temperature,
+                    currentHum : json.currently.humidity,
+                    currentWs : json.currently.windSpeed,
+                    currentIcon : json.currently.icon,
+                });
+                this.props.onSetWeather1({
+                    tempMin : json.daily.data[0].temperatureMin,
+                    tempMax : json.daily.data[0].temperatureMax,
+                    tempMinApparent : json.daily.data[0].apparentTemperatureMin,
+                    tempMaxApparent : json.daily.data[0].apparentTemperatureMax,
+                    humidity : json.daily.data[0].humidity,
+                    windSpeed : json.daily.data[0].windSpeed,
+                    icon : json.daily.data[0].icon,
+                });
+                this.props.onSetWeather2({
+                    tempMin : json.daily.data[1].temperatureMin,
+                    tempMax : json.daily.data[1].temperatureMax,
+                    tempMinApparent : json.daily.data[1].apparentTemperatureMin,
+                    tempMaxApparent : json.daily.data[1].apparentTemperatureMax,
+                    humidity : json.daily.data[1].humidity,
+                    windSpeed : json.daily.data[1].windSpeed,
+                    icon : json.daily.data[1].icon,
+                });
+                this.props.onSetWeather3({
+                    tempMin : json.daily.data[2].temperatureMin,
+                    tempMax : json.daily.data[2].temperatureMax,
+                    tempMinApparent : json.daily.data[2].apparentTemperatureMin,
+                    tempMaxApparent : json.daily.data[2].apparentTemperatureMax,
+                    humidity : json.daily.data[2].humidity,
+                    windSpeed : json.daily.data[2].windSpeed,
+                    icon : json.daily.data[2].icon,
+                });
             })
-            .then(fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${openWeatherKey}`)
+            .then(fetch(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`)
                 .then(response2 => response2.json()) // 응답값을 json으로 변환
                 .then(json2 => {
-                    this.props.onSetForecast(json2);
+                    this.props.onSetWeather0({
+                        tempMin : json2.daily.data[0].temperatureMin,
+                        tempMax : json2.daily.data[0].temperatureMax,
+                        tempMinApparent : json2.daily.data[0].apparentTemperatureMin,
+                        tempMaxApparent : json2.daily.data[0].apparentTemperatureMax,
+                        humidity : json2.daily.data[0].humidity,
+                        windSpeed : json2.daily.data[0].windSpeed,
+                        icon : json2.daily.data[0].icon,
+                    });
                 })
             )
             /*.then(fetch(`http://api.weatherplanet.co.kr/weather/yesterday?version=version&lat=${latitude}&lon=${longitude}&isTimeRange=Y`)
@@ -103,7 +145,7 @@ class SplashScreen extends Component {
                 ;l'.then(json3 => {
                     this.props.onSetPastWeather(json3);
                 })
-            )*/;
+            )*/
     }
 
     _logoFadeIn() {
@@ -186,21 +228,31 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        location: state.geoloc.location,
+        latitude: state.geoloc.latitude,
+        longitude: state.geoloc.longitude,
         address: state.geoloc.address,
-        weather: state.weather.weather,
-        forecast: state.weather.forecast,
-        pastWeahter : state.weather.pastWeahter,
+        weather0: state.weather.weather0,
+        weather1: state.weather.weather1,
+        weather2: state.weather.weather2,
+        weather3: state.weather.weather3,
+        currentBias : state.current.currentBias,
+        currentGender : state.current.currentGender,
+        currentWeather : state.current.currentWeather,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSetLocation: (location) => dispatch(setLocation(location)),
+        onSetLatitude: (latitude) => dispatch(setLatitude(latitude)),
+        onSetLongitude: (longitude) => dispatch(setLongitude(longitude)),
         onSetAddress : (address) => dispatch(setAddress(address)),
-        onSetWeather : (weather) => dispatch(setWeather(weather)),
-        onSetForecast : (forecast) => dispatch(setForecast(forecast)),
-        onSetPastWeather : (pastWeahter) => dispatch(setPastWeather(pastWeahter)),
+        onSetWeather0 : (weather0) => dispatch(setWeather0(weather0)),
+        onSetWeather1 : (weather1) => dispatch(setWeather1(weather1)),
+        onSetWeather2 : (weather2) => dispatch(setWeather2(weather2)),
+        onSetWeather3 : (weather3) => dispatch(setWeather3(weather3)),
+        onSetCurrentBias : (currentBias) => dispatch(setCurrentBias(currentBias)),
+        onSetCurrentGender : (currentGender) => dispatch(setCurrentGender(currentGender)),
+        onSetCurrentWeather : (currentWeather) => dispatch(setCurrentWeather(currentWeather)),
     };
 };
 

@@ -6,14 +6,14 @@ export default class DustConditionItem extends Component {
         const {name, condition} = this.props;
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>
+                <Text style={styles.name}>
                     {name}
                 </Text>
                 <Image
                     style={styles.icon}
                     source={require('../assets/images/dustIcon/3.png')}
                 />
-                <Text style={styles.text}>
+                <Text style={styles.condition}>
                     {condition}
                 </Text>
             </View>
@@ -25,19 +25,24 @@ const styles = StyleSheet.create({
     container : {
         flexDirection: 'row',
         alignItems: 'center',
-        marginLeft:"5%",
+        paddingLeft:"2%",
         flex:1,
     },
     icon : {
         height : 25,
         width : 25,
-        marginRight : "5%",
     },
-    text : {
-        width : "15%",
+    name : {
+        width : "28%",
         fontFamily: 'Bongodik',
-        fontSize: 12,
+        fontSize: 13,
         color : 'white',
-        marginRight: "5%",
+        marginRight: "10%",
+    },
+    condition : {
+        fontFamily: 'Bongodik',
+        fontSize: 13,
+        color : 'white',
+        marginLeft : "12%",
     }
 });

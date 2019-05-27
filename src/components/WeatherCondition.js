@@ -1,42 +1,24 @@
 import React, {Component} from 'react'
 import {Image, View, Text, StyleSheet} from 'react-native'
 
-export default class WeatherCondition extends Component {
-    getWeatherIcon = (weatherId, weatherCondition) => {
-        switch(weatherCondition) {
-            case '11' : return require('../assets/images/weatherIcon/lightning.png');
-            case '09' :
-            case '10' : return require('../assets/images/weatherIcon/rain.png');
-            case '13' : {
-                    if(weatherId == 615 || weatherId == 616)
-                        return require('../assets/images/weatherIcon/snow_rain.png'); 
-                    else
-                        return require('../assets/images/weatherIcon/snow.png');
-                }
-            case '01' : return require('../assets/images/weatherIcon/sunny.png'); // 시간대별로 아이콘 다르게 설정해줘야함!! (moon, sunrise, sunset)
-            case '02' :
-            case '03' :
-            case '50' :
-            case '04' : return require('../assets/images/weatherIcon/cloudy.png');
-            default : return null;
-        }
-    }
+import {getWeatherIcon, getWeatherCondition} from '../functions/getWeatherInfo'
 
+export default class WeatherCondition extends Component {
     render() {
-        const {tempDiff, weatherId, weatherCondition} = this.props;
-        const icon = this.getWeatherIcon(weatherId, weatherCondition);
+        const {tempDiff, icon} = this.props;
+        const iconImage = getWeatherIcon(icon);
         return (
             <View style={styles.container}>
                 <Image
                     style={styles.icon}
-                    source={icon}
+                    source={iconImage}
                 />
                 <View style={styles.textContainer}>
                     <Text style={styles.condition}>
-                        구름많음
+                        {getWeatherCondition(icon)}
                     </Text>
                     <Text style={styles.diff}>
-                        어제보다 {tempDiff}℃
+                        어제보다 {Math.abs(tempDiff).toFixed(1)}℃ {tempDiff>0 ? '↑' : '↓'}
                     </Text>
                 </View>
             </View>
@@ -46,7 +28,7 @@ export default class WeatherCondition extends Component {
 
 const styles = StyleSheet.create({
     container : {
-        paddingLeft : "5%",
+        flex:6.5,
         paddingRight : "7%",
         borderRightWidth : 1,
         borderRightColor : 'white',

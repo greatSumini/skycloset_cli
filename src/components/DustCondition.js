@@ -16,6 +16,8 @@ export default class DustCondition extends Component {
 
 const styles = StyleSheet.create({
     container : {
-        marginLeft : "3%",
+        flex:4.5,
+        paddingRight:1,
+        marginLeft : "8%",
     },
 });
