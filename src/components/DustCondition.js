@@ -7,8 +7,8 @@ export default class DustCondition extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <DustConditionItem name='미세' condition='나쁨'/>
-                <DustConditionItem name='초미세' condition='나쁨'/>
+                <DustConditionItem name='미세' condition='좋음'/>
+                <DustConditionItem name='초미세' condition='좋음'/>
             </View>
         );
     }

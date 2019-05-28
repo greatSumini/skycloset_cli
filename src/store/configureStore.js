@@ -3,11 +3,13 @@ import { createStore, combineReducers, compose } from 'redux';
 import geolocReducer from './reducers/geoloc'
 import weatherReducer from './reducers/weather'
 import currentReducer from './reducers/current'
+import dustReducer from './reducers/dust'
 
 const rootReducer = combineReducers({
     geoloc : geolocReducer,
     weather : weatherReducer,
     current : currentReducer,
+    dust : dustReducer,
 });
 
 let composeEnhancers = compose;

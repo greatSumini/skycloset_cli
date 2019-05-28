@@ -3,8 +3,8 @@ import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from
 import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather} from '../store/actions/index';
-import {googleMapsKey, darkSkyKey} from '../../config/keys';
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust} from '../store/actions/index';
+import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../config/keys';
 
 class SplashScreen extends Component {
     state_loc = {
@@ -140,12 +140,23 @@ class SplashScreen extends Component {
                     });
                 })
             )
-            /*.then(fetch(`http://api.weatherplanet.co.kr/weather/yesterday?version=version&lat=${latitude}&lon=${longitude}&isTimeRange=Y`)
+            .then(fetch(`https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${sgisKey_ID}&consumer_secret=${sgisKey_SECRET}`)
                 .then(response3 => response3.json()) // 응답값을 json으로 변환
-                ;l'.then(json3 => {
-                    this.props.onSetPastWeather(json3);
+                .then(json3 => {
+                    fetch(`https://sgisapi.kostat.go.kr/OpenAPI3/transformation/transcoord.json?accessToken=${json3.result.accessToken}&src=4326&dst=5181&posX=${longitude}&posY=${latitude}`)
+                    .then(response4 => response4.json())
+                    .then(json4 => {
+                        console.log(json4);
+                        this.props.onSetTmX(json4.result.posX);
+                        this.props.onSetTmY(json4.result.posY);
+                        fetch(`http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${airkoreaKey}&tmX=${json4.result.posX}&tmY=${json4.result.posY}&_returnType=json`)
+                        .then(response5 => response5.json())
+                        .then(json5 => {
+                            this.props.onSetDust(json5);
+                        })
+                    })
                 })
-            )*/
+            )
     }
 
     _logoFadeIn() {
@@ -231,6 +242,8 @@ const mapStateToProps = state => {
         latitude: state.geoloc.latitude,
         longitude: state.geoloc.longitude,
         address: state.geoloc.address,
+        tm_x : state.geoloc.tm_x,
+        tm_y : state.geoloc.tm_y,
         weather0: state.weather.weather0,
         weather1: state.weather.weather1,
         weather2: state.weather.weather2,
@@ -238,6 +251,7 @@ const mapStateToProps = state => {
         currentBias : state.current.currentBias,
         currentGender : state.current.currentGender,
         currentWeather : state.current.currentWeather,
+        dust : state.dust.dust,
     };
 };
 
@@ -246,6 +260,8 @@ const mapDispatchToProps = dispatch => {
         onSetLatitude: (latitude) => dispatch(setLatitude(latitude)),
         onSetLongitude: (longitude) => dispatch(setLongitude(longitude)),
         onSetAddress : (address) => dispatch(setAddress(address)),
+        onSetTmX : (tm_x) => dispatch(setTmX(tm_x)),
+        onSetTmY : (tm_y) => dispatch(setTmY(tm_y)),
         onSetWeather0 : (weather0) => dispatch(setWeather0(weather0)),
         onSetWeather1 : (weather1) => dispatch(setWeather1(weather1)),
         onSetWeather2 : (weather2) => dispatch(setWeather2(weather2)),
@@ -253,6 +269,7 @@ const mapDispatchToProps = dispatch => {
         onSetCurrentBias : (currentBias) => dispatch(setCurrentBias(currentBias)),
         onSetCurrentGender : (currentGender) => dispatch(setCurrentGender(currentGender)),
         onSetCurrentWeather : (currentWeather) => dispatch(setCurrentWeather(currentWeather)),
+        onSetDust : (dust) => dispatch(setDust(dust)),
     };
 };
 

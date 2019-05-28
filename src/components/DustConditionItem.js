@@ -11,7 +11,7 @@ export default class DustConditionItem extends Component {
                 </Text>
                 <Image
                     style={styles.icon}
-                    source={require('../assets/images/dustIcon/3.png')}
+                    source={require('../assets/images/dustIcon/4_good.png')}
                 />
                 <Text style={styles.condition}>
                     {condition}

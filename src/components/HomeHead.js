@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         fontSize : 20,
         textAlign : 'center',
         fontFamily : "Bongodik",
+        fontWeight : "bold",
         color : 'white',
     },
 });
