@@ -3,7 +3,7 @@ import {Image, View, Text, StyleSheet} from 'react-native'
 
 export default class DustConditionItem extends Component {
     render() {
-        const {name, condition} = this.props;
+        const {name, condition, img} = this.props;
         return (
             <View style={styles.container}>
                 <Text style={styles.name}>
@@ -11,7 +11,7 @@ export default class DustConditionItem extends Component {
                 </Text>
                 <Image
                     style={styles.icon}
-                    source={require('../assets/images/dustIcon/4_good.png')}
+                    source={img}
                 />
                 <Text style={styles.condition}>
                     {condition}

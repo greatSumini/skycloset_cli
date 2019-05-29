@@ -21,7 +21,7 @@ class HomeScreen extends Component {
     };
 
     render() {
-        const {address, currentWeather, weather1, weather0} = this.props;
+        const {address, currentWeather, weather1, weather0, dust} = this.props;
         return (
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
@@ -43,6 +43,8 @@ class HomeScreen extends Component {
                                     tempMax={weather1.tempMax}
                                     icon={currentWeather.currentIcon}
                                     tempDiff={(weather1.tempMax - weather0.tempMax)}
+                                    pm10 = {dust.pm10Value}
+                                    pm25 = {dust.pm25Value}
                                 />
                                 <Closet
                                     style={{width:"90%"}}
@@ -85,6 +87,7 @@ const mapStateToProps = state => {
         currentBias : state.current.currentBias,
         currentGender : state.current.currentGender,
         currentWeather : state.current.currentWeather,
+        dust : state.dust.dust,
     };
 };
 

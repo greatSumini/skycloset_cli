@@ -6,7 +6,7 @@ import DustCondition from './DustCondition'
 
 export default class WeatherInfo extends Component {
     render = () => {
-        const {tempNow, tempMax, tempMin, tempDiff, icon} = this.props;
+        const {tempNow, tempMax, tempMin, tempDiff, icon, pm10, pm25} = this.props;
 
         return (
             <View style={styles.container}>
@@ -22,7 +22,11 @@ export default class WeatherInfo extends Component {
                         tempDiff={tempDiff}
                         icon={icon}
                     />
-                    <DustCondition style={styles.dustCondition} />
+                    <DustCondition 
+                        style={styles.dustCondition}
+                        pm10={pm10}
+                        pm25={pm25}
+                    />
                 </View>
             </View>
         );

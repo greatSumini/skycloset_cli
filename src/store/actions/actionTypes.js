@@ -14,3 +14,4 @@ export const SET_CURRENT_GENDER = 'SET_CURRENT_GENDER';
 export const SET_CURRENT_BIAS = 'SET_CURRENT_BIAS';
 
 export const SET_DUST = 'SET_DUST';
+export const SET_DIST = 'SET_DIST';

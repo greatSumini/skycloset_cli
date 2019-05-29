@@ -3,7 +3,7 @@ import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from
 import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust} from '../store/actions/index';
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust, setDist} from '../store/actions/index';
 import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../config/keys';
 
 class SplashScreen extends Component {
@@ -106,6 +106,7 @@ class SplashScreen extends Component {
                     humidity : json.daily.data[0].humidity,
                     windSpeed : json.daily.data[0].windSpeed,
                     icon : json.daily.data[0].icon,
+                    cloudCover : json.daily.data[0].cloudCover,
                 });
                 this.props.onSetWeather2({
                     tempMin : json.daily.data[1].temperatureMin,
@@ -115,6 +116,7 @@ class SplashScreen extends Component {
                     humidity : json.daily.data[1].humidity,
                     windSpeed : json.daily.data[1].windSpeed,
                     icon : json.daily.data[1].icon,
+                    cloudCover : json.daily.data[1].cloudCover,
                 });
                 this.props.onSetWeather3({
                     tempMin : json.daily.data[2].temperatureMin,
@@ -124,6 +126,7 @@ class SplashScreen extends Component {
                     humidity : json.daily.data[2].humidity,
                     windSpeed : json.daily.data[2].windSpeed,
                     icon : json.daily.data[2].icon,
+                    cloudCover : json.daily.data[2].cloudCover,
                 });
             })
             .then(fetch(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`)
@@ -137,6 +140,7 @@ class SplashScreen extends Component {
                         humidity : json2.daily.data[0].humidity,
                         windSpeed : json2.daily.data[0].windSpeed,
                         icon : json2.daily.data[0].icon,
+                        cloudCover : json2.daily.data[0].cloudCover,
                     });
                 })
             )
@@ -152,7 +156,12 @@ class SplashScreen extends Component {
                         fetch(`http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${airkoreaKey}&tmX=${json4.result.posX}&tmY=${json4.result.posY}&_returnType=json`)
                         .then(response5 => response5.json())
                         .then(json5 => {
-                            this.props.onSetDust(json5);
+                            this.props.onSetDist(json5.list[0].tm);
+                            fetch(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[0].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`)
+                            .then(response6 => response6.json())
+                            .then(json6 => {
+                                this.props.onSetDust(json6.list[0]);
+                            })
                         })
                     })
                 })
@@ -252,6 +261,7 @@ const mapStateToProps = state => {
         currentGender : state.current.currentGender,
         currentWeather : state.current.currentWeather,
         dust : state.dust.dust,
+        dist : state.dust.dist,
     };
 };
 
@@ -270,6 +280,7 @@ const mapDispatchToProps = dispatch => {
         onSetCurrentGender : (currentGender) => dispatch(setCurrentGender(currentGender)),
         onSetCurrentWeather : (currentWeather) => dispatch(setCurrentWeather(currentWeather)),
         onSetDust : (dust) => dispatch(setDust(dust)),
+        onSetDist : (dist) => dispatch(setDist(dist)),
     };
 };
 

@@ -1,7 +1,8 @@
-import {SET_DUST} from '../actions/actionTypes'
+import {SET_DUST, SET_DIST} from '../actions/actionTypes'
 
 const initialState = {
     dust : {},
+    dist : 0,
 }
 
 const reducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 dust : action.dust,
+            };
+        case SET_DIST :
+            return {
+                ...state,
+                dist : action.dist,
             };
         default:
             return state;
