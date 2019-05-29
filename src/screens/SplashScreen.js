@@ -94,8 +94,10 @@ class SplashScreen extends Component {
             .then(json => {
                 this.props.onSetCurrentWeather({
                     currentTemp :json.currently.temperature,
+                    currentTempApparent : json.currently.apparentTemperature,
                     currentHum : json.currently.humidity,
                     currentWs : json.currently.windSpeed,
+                    currentCc : json.currently.cloudCover,
                     currentIcon : json.currently.icon,
                 });
                 this.props.onSetWeather1({
