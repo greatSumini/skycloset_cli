@@ -24,15 +24,19 @@ const pmCondition = [
 ];
 
 export const getPmIcon = (value, type) => {
-    for(let i = 0;i<8;++i) {
+    let i = 0
+    for(;i<7;++i) {
         if(value <= pmStand[type][i])
-            return pmIcon[i];
+            break;
     }
+    return pmIcon[i];
 }
 
 export const getPmCondition = (value, type) => {
-    for(let i = 0;i<8;++i) {
+    let i = 0
+    for(;i<7;++i) {
         if(value <= pmStand[type][i])
-            return pmCondition[i];
+            break;
     }
+    return pmCondition[i];
 }
