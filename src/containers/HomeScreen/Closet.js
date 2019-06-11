@@ -6,7 +6,7 @@ import Cloth from './Cloth';
 export default class Closet extends Component {
     render() {
         return (
-            <ImageBackground source={require('../assets/images/closet/closet_sunmove.png')} style={styles.imgbg}>
+            <ImageBackground source={require('../../assets/images/closet/closet_sunmove.png')} style={styles.imgbg}>
                 <View style={styles.clothContainer}>
                     <Cloth />
                     <Cloth />

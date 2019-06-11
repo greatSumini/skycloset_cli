@@ -5,11 +5,11 @@ import {connect} from 'react-redux';
 import Drawer from 'react-native-drawer'
 import LinearGradient from 'react-native-linear-gradient'
 
-import DrawerPanel from '../components/DrawerPanel'
-import HomeHead from '../components/HomeHead'
-import WeatherInfo from '../components/WeatherInfo'
-import Closet from '../components/Closet'
-import getHomeBgColor from '../functions/getHomeBgColor'
+import DrawerPanel from '../DrawerPanel/DrawerPanel'
+import HomeHead from './HomeHead'
+import WeatherInfo from './WeatherInfo'
+import Closet from './Closet'
+import getHomeBgColor from './getHomeBgColor'
 
 class HomeScreen extends Component {
 

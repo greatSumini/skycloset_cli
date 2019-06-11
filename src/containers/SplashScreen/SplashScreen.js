@@ -3,8 +3,8 @@ import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from
 import Geolocation from 'react-native-geolocation-service';
 import {connect} from 'react-redux';
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust, setDist} from '../store/actions/index';
-import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../config/keys';
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust, setDist} from '../../store/actions/index';
+import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys';
 
 class SplashScreen extends Component {
     state_loc = {
@@ -203,7 +203,7 @@ class SplashScreen extends Component {
                 <View style={styles.logoContainer}>
                     <Animated.Image
                         style={this._getLogoStyle()}
-                        source={require('../assets/images/logo.png')}
+                        source={require('../../assets/images/logo.png')}
                     />
                 </View>
                 <View style={styles.titleContainer}>

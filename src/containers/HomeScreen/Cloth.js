@@ -8,7 +8,7 @@ export default class Cloth extends Component {
                 <Image
                     style={styles.image}
                     resizeMode='stretch'
-                    source={require('../assets/images/cloth/w_onepiece.png')}
+                    source={require('../../assets/images/cloth/w_onepiece.png')}
                 />
                 <Text style={styles.text}>
                     원피스

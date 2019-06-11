@@ -13,13 +13,13 @@ const pmIcon = [
     require('../assets/images/dustIcon/8_terrible.png'),
 ];
 const pmCondition = [
-    '최고 좋음',
+    '최고',
     '좋음',
     '양호',
     '보통',
+    '주의',
     '나쁨',
-    '상당히 나쁨',
-    '매우 나쁨',
+    '위험',
     '최악',
 ];
 
