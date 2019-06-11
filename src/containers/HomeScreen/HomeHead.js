@@ -10,7 +10,7 @@ export default class HomeHead extends Component {
                     onPress={onButtonPressed}
                     style={styles.menuButton}>
                     <Image
-                        source={require('../../assets/images/drawerButton.jpg')}
+                        source={require('../../assets/images/drawerButton.png')}
                     />
                 </TouchableOpacity>
                 <Text style={styles.titletText}>

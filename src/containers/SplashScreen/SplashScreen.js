@@ -7,22 +7,34 @@ import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeat
 import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys';
 
 class SplashScreen extends Component {
-    state_loc = {
+    state = {
         logoOp : new Animated.Value(0),
+        isLoaded : false,
+        AnimateDone : false,
     }
 
     async componentWillMount() {
         this.animatedValue = new Animated.Value(0);
-        this.getLocation();
+        const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
+            this.getLocation()
+        }
     }
 
-    performTimeConsumingTask = async() => {
+    readyFor2500milisec = async() => {
         return new Promise((resolve) =>
             setTimeout (
                 () => {resolve('result')},
                 2500
             )    
         );
+    }
+
+    componentDidUpdate() {
+        if(this.state.AnimateDone) {
+            if(this.state.isLoaded)
+                this.props.navigation.navigate('App')
+        }   
     }
 
     async componentDidMount() {
@@ -33,33 +45,29 @@ class SplashScreen extends Component {
             delay:800,
         }).start();
         
-        //this.getAddressFromGoogleApi();
-        //this._getWeather();
-        //const addr = this.getAddressFromGoogleApi();
-        const data = await this.performTimeConsumingTask();
-        if(data!==null) {
-            this.props.navigation.navigate('App');
+        const done = await this.readyFor2500milisec();
+        if(done!==null) {
+            this.setState({AnimateDone : true})
         }
     }
 
-    async getLocation() {
-        const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
+    getLocation() {
+        /*const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {*/
             Geolocation.getCurrentPosition(
                 (position) => {
                     this.props.onSetLatitude(position.coords.latitude);
                     this.props.onSetLongitude(position.coords.longitude);
                     this.getAddressFromGoogleApi();
                     this._getWeather();
-                    return LocationPermission;
                 },
                 (error) => {
                     console.log(error.code, error.message);
                 },
                 {enableHighAccuracy:true, timeout:15000, maximumAge:10000}
-            );
+            );/*
         }
-        return null;
+        return;*/
     }
     
 
@@ -76,7 +84,6 @@ class SplashScreen extends Component {
             const address =  responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name
             this.props.onSetAddress(address);
             console.log(responseJson);
-            return responseJson;
         }
         catch (error) {
             console.error(error);
@@ -163,6 +170,7 @@ class SplashScreen extends Component {
                             .then(response6 => response6.json())
                             .then(json6 => {
                                 this.props.onSetDust(json6.list[0]);
+                                this.setState({isLoaded : true})
                             })
                         })
                     })
@@ -171,7 +179,7 @@ class SplashScreen extends Component {
     }
 
     _logoFadeIn() {
-        Animated.timing(this.state_loc.logoOp, {
+        Animated.timing(this.state.logoOp, {
             toValue: 1,
             duration: 300,
             delay:200,
@@ -181,7 +189,7 @@ class SplashScreen extends Component {
     _getLogoStyle() {
         return {
             width: 128, height:128,
-            opacity: this.state_loc.logoOp,
+            opacity: this.state.logoOp,
         }
     }
 
