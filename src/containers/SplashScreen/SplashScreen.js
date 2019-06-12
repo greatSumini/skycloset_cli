@@ -21,7 +21,7 @@ class SplashScreen extends Component {
         }
     }
 
-    readyFor2500milisec = async() => {
+    readyFor2500ms = async() => {
         return new Promise((resolve) =>
             setTimeout (
                 () => {resolve('result')},
@@ -45,13 +45,13 @@ class SplashScreen extends Component {
             delay:800,
         }).start();
         
-        const done = await this.readyFor2500milisec();
+        const done = await this.readyFor2500ms();
         if(done!==null) {
             this.setState({AnimateDone : true})
         }
     }
 
-    getLocation() {
+    getLocation = () => {
         /*const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
         if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {*/
             Geolocation.getCurrentPosition(
@@ -176,6 +176,9 @@ class SplashScreen extends Component {
                     })
                 })
             )
+    }
+
+    _getUserInfo = () => {
     }
 
     _logoFadeIn() {
