@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Image, View, Text, StyleSheet} from 'react-native'
 
-import {getWeatherIcon, getWeatherCondition} from '../../functions/getWeatherInfo'
+import {getWeatherIcon, getWeatherCondition} from './getWeatherInfo'
 
 export default class WeatherCondition extends Component {
     render() {

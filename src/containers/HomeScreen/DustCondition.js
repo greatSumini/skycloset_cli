@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {View, StyleSheet} from 'react-native'
 
 import DustConditionItem from './DustConditionItem'
-import {getPmIcon, getPmCondition} from '../../functions/getDustInfo'
+import {getPmIcon, getPmCondition} from './getDustInfo'
 
 export default class DustCondition extends Component {
     render() {

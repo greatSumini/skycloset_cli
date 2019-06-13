@@ -33,6 +33,7 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 ### Libraries
 1. [react-navigation](https://github.com/react-navigation/react-navigation)
 2. [react-native-geolocation-service](https://github.com/Agontuk/react-native-geolocation-service)
+3. [react-native-async-storage](https://github.com/react-native-community/react-native-async-storage)
 
 
 ### API services
