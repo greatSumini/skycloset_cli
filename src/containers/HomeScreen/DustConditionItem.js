@@ -32,16 +32,16 @@ const styles = StyleSheet.create({
         height : 22,
         width : 22,
     },
-    name : {
-        width : "28%",
+    name : { // medium
+        width : "22%",
         fontFamily: 'Bongodik',
-        fontSize: 13,
+        fontSize: 11,
         color : 'white',
         marginRight: "10%",
     },
     condition : {
-        fontFamily: 'Bongodik',
-        fontSize: 13,
+        fontFamily: 'Bongodik-Medium',
+        fontSize: 11,
         color : 'white',
         marginLeft : "12%",
     }

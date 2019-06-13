@@ -10,21 +10,21 @@ import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from
 
 class SplashScreen extends Component {
     state = {
-        logoOp : new Animated.Value(0),
         isLoaded : false,
         AnimateDone : false,
         UserInfoPrepared : false,
     }
 
     async componentWillMount() {
-        this.animatedValue = new Animated.Value(0)
         this._getUserInfo()
-        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
-        .then(LocationPermission => {
-            if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
-                this.getLocation()
-            }
-        })
+        LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
+            this.getLocation()
+        }
+        const done = await this.readyFor2500ms()
+        if(done!==null) {
+            this.setState({AnimateDone : true})
+        }
     }
 
     readyFor2500ms = async() => {
@@ -43,37 +43,19 @@ class SplashScreen extends Component {
         }   
     }
 
-    async componentDidMount() {
-        this._logoFadeIn()
-        Animated.timing(this.animatedValue, {
-            toValue: 150,
-            duration: 400,
-            delay:800,
-        }).start();
-        
-        const done = await this.readyFor2500ms();
-        if(done!==null) {
-            this.setState({AnimateDone : true})
-        }
-    }
-
     getLocation = () => {
-        /*const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {*/
             Geolocation.getCurrentPosition(
                 (position) => {
-                    this.props.onSetLatitude(position.coords.latitude);
-                    this.props.onSetLongitude(position.coords.longitude);
-                    this.getAddressFromGoogleApi();
-                    this._getWeather();
+                    this.props.onSetLatitude(position.coords.latitude)
+                    this.props.onSetLongitude(position.coords.longitude)
+                    this.getAddressFromGoogleApi()
+                    this._getWeather()
                 },
                 (error) => {
                     console.log(error.code, error.message)
                 },
                 {enableHighAccuracy:true, timeout:15000, maximumAge:10000}
-            );/*
-        }
-        return;*/
+            )
     }
 
     async getAddressFromGoogleApi() {
@@ -209,31 +191,16 @@ class SplashScreen extends Component {
         return fetch_retry(url, n - 1);
     });
 
-    _logoFadeIn() {
-        Animated.timing(this.state.logoOp, {
-            toValue: 1,
-            duration: 300,
-            delay:200,
-        }).start();
-    }
-
     _getLogoStyle() {
         return {
             width: 128, height:128,
-            opacity: this.state.logoOp,
+            opacity: 1,
         }
     }
 
     render() {
-        const interpolateColor = this.animatedValue.interpolate({
-            inputRange: [0, 150],
-            outputRange: ['rgb(0, 193, 222)', 'rgb(255, 255, 255)']
-        })
-        const animiatedStyle = {
-            backgroundColor: interpolateColor
-        }
         return (
-            <Animated.View style={[styles.container, animiatedStyle]}>
+            <Animated.View style={styles.container}>
                 <View style={styles.logoContainer}>
                     <Animated.Image
                         style={this._getLogoStyle()}
@@ -258,6 +225,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor : 'rgb(0, 193, 222)'
     },
     logoContainer: {
         height: '70%',

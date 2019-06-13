@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Share, StyleSheet, ScrollView, Text, View} from 'react-native';
+import {Dimensions, Share, StyleSheet, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 
 import Drawer from 'react-native-drawer'
@@ -8,16 +8,12 @@ import LinearGradient from 'react-native-linear-gradient'
 import DrawerPanel from '../DrawerPanel/DrawerPanel'
 import HomeHead from './HomeHead'
 import WeatherInfo from './WeatherInfo'
-import Closet from './Closet'
-import getHomeBgColor from './getHomeBgColor'
+import Closet from '../../components/Closet'
+import {getHomeBgColor} from './getBgColor'
 import {getPmCondition, getPmImoticon} from './getDustInfo'
 import {getWeatherCondition, getWeatherImoticon} from './getWeatherInfo'
 
 class HomeScreen extends Component {
-
-    componentDidMount() {
-    }
-
     openDrawer = async () => {
         this._drawer.open()
     }
@@ -73,13 +69,7 @@ class HomeScreen extends Component {
                                     pm10 = {dust.pm10Value}
                                     pm25 = {dust.pm25Value}
                                 />
-                                <Closet
-                                    style={{width:"90%"}}
-                                />
-                                <Text>fdsdsf</Text>
-                                <Text>fdsdsf</Text>
-                                <Text>fdsdsf</Text>
-                                <Text>fdsdsf</Text>
+                                <Closet/>
                             </View>
                         </LinearGradient>
                     </ScrollView>
@@ -90,17 +80,12 @@ class HomeScreen extends Component {
 
 const styles = StyleSheet.create({
     wrapper : {
+        width: "100%",
         paddingTop : "8%",
-        paddingLeft : "5%",
-        paddingRight : "5%",
-    },
-    container : {
+        alignItems: "center",
     },
     homeHead : {
         height: "15%",
-    },
-    weatherInfo : {
-        height: "70%",
     },
 });
 

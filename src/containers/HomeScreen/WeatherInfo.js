@@ -3,6 +3,7 @@ import {View, Text, StyleSheet} from 'react-native'
 
 import WeatherCondition from './WeatherCondition'
 import DustCondition from './DustCondition'
+import {getCondBoxColor} from './getBgColor'
 
 export default class WeatherInfo extends Component {
     render = () => {
@@ -14,9 +15,9 @@ export default class WeatherInfo extends Component {
                     {tempNow.toFixed(1)}℃
                 </Text>
                 <Text style={styles.tempMinMaxStyle}>
-                    ({tempMax.toFixed(1)}℃/{tempMin.toFixed(1)}℃)
+                    ( {tempMax.toFixed(1)}℃ / {tempMin.toFixed(1)}℃ )
                 </Text>
-                <View style={styles.conditionContainer}>
+                <View style={[styles.conditionContainer, {backgroundColor:getCondBoxColor()}]}>
                     <WeatherCondition
                         style={styles.wetherCondition}
                         tempDiff={tempDiff}
@@ -37,31 +38,33 @@ const styles = StyleSheet.create({
    container : {
         alignItems: 'center',
         justifyContent : 'center',
+        marginBottom : "4%",
    },
    tempNowStyle : {
-        paddingTop : 5,
+        paddingTop : 2,
         paddingBottom : 5,
         fontSize : 35,
         color : 'white',
+        fontFamily : "Bongodik-Regular",
    },
    tempMinMaxStyle : {
         paddingTop : 3,
         paddingBottom : 3,
-        fontSize : 15,
+        fontSize : 17,
         color : 'white',
+        fontFamily : "Bongodik-Regular",
    },
    conditionContainer : {
         width:"94%",
         flexDirection : 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop : "4%",
-        paddingTop : "2%",
+        marginTop : "6%",
+        paddingTop : "1.5%",
         paddingLeft : "4%",
         paddingRight : "4%",
-        paddingBottom : "7%",
-        backgroundColor : 'rgba(255, 255, 255, 0.15)',
-        borderRadius:10,
+        paddingBottom : "9.5%",
+        borderRadius:15,
    },
    weatherCondition : {
         flexDirection : 'row',

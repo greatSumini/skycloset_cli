@@ -46,6 +46,7 @@
 		04A636A1A8554706AC5552CF /* Bongodik-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = DC87364DEC5747A1838D815E /* Bongodik-Medium.otf */; };
 		2B0E189209FC450F99554956 /* libBVLinearGradient.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 821BE4AAE27443C68A640AA0 /* libBVLinearGradient.a */; };
 		9936FF1CD7E14C2C8D765065 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E3FB716B75C7492D87589BB0 /* libRNCAsyncStorage.a */; };
+		6BA20AD774D24EFF81519C33 /* BonGodik-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 14739272328E4FCE9C95ED89 /* BonGodik-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -363,6 +364,7 @@
 		821BE4AAE27443C68A640AA0 /* libBVLinearGradient.a */ = {isa = PBXFileReference; name = "libBVLinearGradient.a"; path = "libBVLinearGradient.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		86D1D852A8504CA8BCFA01F3 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		E3FB716B75C7492D87589BB0 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		14739272328E4FCE9C95ED89 /* BonGodik-Regular.otf */ = {isa = PBXFileReference; name = "BonGodik-Regular.otf"; path = "../src/assets/fonts/BonGodik-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -641,6 +643,7 @@
 				32ACF69ED43E4BEFA9E2B8EC /* LogoENG-Medium.otf */,
 				AC491D2A79114F9783926CCB /* LogoKOR-Medium.otf */,
 				DC87364DEC5747A1838D815E /* Bongodik-Medium.otf */,
+				14739272328E4FCE9C95ED89 /* BonGodik-Regular.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1095,6 +1098,7 @@
 				2BEA52E612C346C197A59D77 /* LogoENG-Medium.otf in Resources */,
 				070478A4CC494B71ADE1FF95 /* LogoKOR-Medium.otf in Resources */,
 				04A636A1A8554706AC5552CF /* Bongodik-Medium.otf in Resources */,
+				6BA20AD774D24EFF81519C33 /* BonGodik-Regular.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

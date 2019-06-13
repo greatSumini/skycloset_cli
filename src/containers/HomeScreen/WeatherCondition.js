@@ -29,7 +29,8 @@ export default class WeatherCondition extends Component {
 const styles = StyleSheet.create({
     container : {
         flex:6.5,
-        paddingRight : "7%",
+        paddingLeft:"3%",
+        paddingRight : "3%",
         borderRightWidth : 1,
         borderRightColor : 'white',
         flexDirection:'row',
@@ -38,13 +39,14 @@ const styles = StyleSheet.create({
     textContainer : {
         flexDirection: 'column'
     },
-    condition : {
-        fontSize : 16,
+    condition : { // medium
+        fontSize : 15,
         color : 'white',
         marginBottom : "10%",
+        fontFamily : "Bongodik-Medium",
     },
     diff : {
-        fontSize : 12,
+        fontSize : 11,
         color : 'white',
     },
     icon : {

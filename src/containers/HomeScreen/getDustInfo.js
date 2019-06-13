@@ -11,7 +11,7 @@ const pmIcon = [
     require('../../assets/images/dustIcon/6_bad.png'),
     require('../../assets/images/dustIcon/7_angry.png'),
     require('../../assets/images/dustIcon/8_terrible.png'),
-];
+]
 const pmCondition = [
     '최고',
     '좋음',
@@ -21,7 +21,7 @@ const pmCondition = [
     '나쁨',
     '위험',
     '최악',
-];
+]
 const pmImoticon = [
     '😍',
     '😄',
@@ -31,31 +31,31 @@ const pmImoticon = [
     '😫',
     '😡',
     '👿',
-];
+]
 
 export const getPmIcon = (value, type) => {
     let i = 0
     for(;i<7;++i) {
         if(value <= pmStand[type][i])
-            break;
+            break
     }
-    return pmIcon[i];
+    return pmIcon[i]
 }
 
 export const getPmCondition = (value, type) => {
     let i = 0
     for(;i<7;++i) {
         if(value <= pmStand[type][i])
-            break;
+            break
     }
-    return pmCondition[i];
+    return pmCondition[i]
 }
 
 export const getPmImoticon = (value, type) => {
     let i = 0
     for(;i<7;++i) {
         if(value <= pmStand[type][i])
-            break;
+            break
     }
-    return pmImoticon[i];
+    return pmImoticon[i]
 }
