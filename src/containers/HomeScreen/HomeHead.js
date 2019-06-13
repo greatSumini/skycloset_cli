@@ -3,11 +3,11 @@ import {View, Image, Text, StyleSheet, TouchableOpacity} from 'react-native'
 
 export default class HomeHead extends Component {
     render() {
-        const {address, onButtonPressed} = this.props;
+        const {address, onDrawerButtonPressed, onShareButtonPressed} = this.props;
         return (
             <View style={styles.container}>
                 <TouchableOpacity 
-                    onPress={onButtonPressed}
+                    onPress={onDrawerButtonPressed}
                     style={styles.menuButton}>
                     <Image
                         source={require('../../assets/images/drawerButton.png')}
@@ -16,9 +16,13 @@ export default class HomeHead extends Component {
                 <Text style={styles.titletText}>
                     {address}
                 </Text>
-                <View style={styles.menuButton}>
-                    <Text>　</Text>
-                </View>
+                <TouchableOpacity 
+                    onPress={onShareButtonPressed}
+                    style={styles.menuButton}>
+                    <Image
+                        source={require('../../assets/images/drawerButton.png')}
+                    />
+                </TouchableOpacity>
             </View>
         );
     }

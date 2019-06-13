@@ -8,6 +8,7 @@
     "android": "react-native run-android"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.4.2",
     "react": "16.8.3",
     "react-native": "^0.59.9",
     "react-native-drawer": "^2.5.1",

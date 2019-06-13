@@ -1,24 +1,30 @@
-import React, {Component} from 'react';
-import {View, AsyncStorage, StyleSheet, Text, Animated, PermissionsAndroid} from 'react-native';
-import Geolocation from 'react-native-geolocation-service';
-import {connect} from 'react-redux';
+import React, {Component} from 'react'
+import {View, StyleSheet, Text, Animated, PermissionsAndroid} from 'react-native'
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust, setDist} from '../../store/actions/index';
-import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys';
+import Geolocation from 'react-native-geolocation-service'
+import {connect} from 'react-redux'
+import AsyncStorage from '@react-native-community/async-storage'
+
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
+import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
 
 class SplashScreen extends Component {
     state = {
         logoOp : new Animated.Value(0),
         isLoaded : false,
         AnimateDone : false,
+        UserInfoPrepared : false,
     }
 
     async componentWillMount() {
-        this.animatedValue = new Animated.Value(0);
-        const LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
-        if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
-            this.getLocation()
-        }
+        this.animatedValue = new Animated.Value(0)
+        this._getUserInfo()
+        PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
+        .then(LocationPermission => {
+            if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
+                this.getLocation()
+            }
+        })
     }
 
     readyFor2500ms = async() => {
@@ -38,7 +44,7 @@ class SplashScreen extends Component {
     }
 
     async componentDidMount() {
-        this._logoFadeIn();
+        this._logoFadeIn()
         Animated.timing(this.animatedValue, {
             toValue: 150,
             duration: 400,
@@ -62,14 +68,13 @@ class SplashScreen extends Component {
                     this._getWeather();
                 },
                 (error) => {
-                    console.log(error.code, error.message);
+                    console.log(error.code, error.message)
                 },
                 {enableHighAccuracy:true, timeout:15000, maximumAge:10000}
             );/*
         }
         return;*/
     }
-    
 
     async getAddressFromGoogleApi() {
         const api = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=';
@@ -79,7 +84,7 @@ class SplashScreen extends Component {
         let apiRequestUrl = api + latitude + ',' + longitude + '&language=ko&key=' + googleMapsKey;
 
         try {
-            let response = await fetch(apiRequestUrl);
+            let response = await this.fetch_retry(apiRequestUrl, 10);
             let responseJson = await response.json();
             const address =  responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name
             this.props.onSetAddress(address);
@@ -91,12 +96,12 @@ class SplashScreen extends Component {
     }
 
     _getWeather = () => {
-        latitude = this.props.latitude;
-        longitude = this.props.longitude;
-        todayTime = Math.floor(new Date().getTime() / 1000);
-        yesterTime = todayTime - 86400;
+        latitude = this.props.latitude
+        longitude = this.props.longitude
+        todayTime = Math.floor(new Date().getTime() / 1000)
+        yesterTime = todayTime - 86400
         
-        fetch(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude}?exclude=minutely,alerts,flags&units=si`)
+        this.fetch_retry(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude}?exclude=minutely,alerts,flags&units=si`, 10)
             .then(response => response.json()) // 응답값을 json으로 변환
             .then(json => {
                 this.props.onSetCurrentWeather({
@@ -138,7 +143,7 @@ class SplashScreen extends Component {
                     cloudCover : json.daily.data[2].cloudCover,
                 });
             })
-            .then(fetch(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`)
+            .then(this.fetch_retry(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`, 10)
                 .then(response2 => response2.json()) // 응답값을 json으로 변환
                 .then(json2 => {
                     this.props.onSetWeather0({
@@ -153,20 +158,20 @@ class SplashScreen extends Component {
                     });
                 })
             )
-            .then(fetch(`https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${sgisKey_ID}&consumer_secret=${sgisKey_SECRET}`)
+            .then(this.fetch_retry(`https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${sgisKey_ID}&consumer_secret=${sgisKey_SECRET}`, 10)
                 .then(response3 => response3.json()) // 응답값을 json으로 변환
                 .then(json3 => {
-                    fetch(`https://sgisapi.kostat.go.kr/OpenAPI3/transformation/transcoord.json?accessToken=${json3.result.accessToken}&src=4326&dst=5181&posX=${longitude}&posY=${latitude}`)
+                    this.fetch_retry(`https://sgisapi.kostat.go.kr/OpenAPI3/transformation/transcoord.json?accessToken=${json3.result.accessToken}&src=4326&dst=5181&posX=${longitude}&posY=${latitude}`, 10)
                     .then(response4 => response4.json())
                     .then(json4 => {
                         console.log(json4);
                         this.props.onSetTmX(json4.result.posX);
                         this.props.onSetTmY(json4.result.posY);
-                        fetch(`http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${airkoreaKey}&tmX=${json4.result.posX}&tmY=${json4.result.posY}&_returnType=json`)
+                        this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${airkoreaKey}&tmX=${json4.result.posX}&tmY=${json4.result.posY}&_returnType=json`, 10)
                         .then(response5 => response5.json())
                         .then(json5 => {
                             this.props.onSetDist(json5.list[0].tm);
-                            fetch(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[0].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`)
+                            this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[0].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`, 10)
                             .then(response6 => response6.json())
                             .then(json6 => {
                                 this.props.onSetDust(json6.list[0]);
@@ -178,8 +183,31 @@ class SplashScreen extends Component {
             )
     }
 
-    _getUserInfo = () => {
+    _getUserInfo = async () => {
+        try {
+            const userGender = await AsyncStorage.getItem('gender')
+            if(userGender !== null) {
+                let userBias = await AsyncStorage.getItem('bias')
+                if(userBias === null) {
+                    await AsyncStorage.setItem('bias', '0')
+                    userBias = '0'
+                }
+                this.props.onSetCurrentGender(userGender)
+                this.props.onSetCurrentBias(Number(userBias))
+                this.setState({UserInfoPrepared : true})
+            }
+            else {
+                // gender 선택창을 띄운다.
+            }
+        } catch(e) {
+            // reading error
+        }
     }
+
+    fetch_retry = (url, n) => fetch(url).catch(function(error) {
+        if (n === 1) throw error;
+        return fetch_retry(url, n - 1);
+    });
 
     _logoFadeIn() {
         Animated.timing(this.state.logoOp, {
@@ -195,11 +223,6 @@ class SplashScreen extends Component {
             opacity: this.state.logoOp,
         }
     }
-
-    _bootstrapAsync = async() => {
-        const userToken = await AsyncStorage.getItem('userToken');
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
-    };
 
     render() {
         const interpolateColor = this.animatedValue.interpolate({
@@ -298,4 +321,4 @@ const mapDispatchToProps = dispatch => {
 };
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen)

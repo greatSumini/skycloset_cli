@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, ScrollView, Text, View} from 'react-native';
+import {Share, StyleSheet, ScrollView, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 
 import Drawer from 'react-native-drawer'
@@ -10,15 +10,41 @@ import HomeHead from './HomeHead'
 import WeatherInfo from './WeatherInfo'
 import Closet from './Closet'
 import getHomeBgColor from './getHomeBgColor'
+import {getPmCondition, getPmImoticon} from './getDustInfo'
+import {getWeatherCondition, getWeatherImoticon} from './getWeatherInfo'
 
 class HomeScreen extends Component {
 
     componentDidMount() {
     }
 
-    openDrawer = () => {
+    openDrawer = async () => {
         this._drawer.open()
-    };
+    }
+
+    shareWeather = async () => {
+        tempDiff = this.props.weather1.tempMax - this.props.weather0.tempMax
+        const result = await Share.share({
+            message:
+            `☀하늘옷장☁ - Share Test Message
+지금 ${this.props.address}의 날씨는 ${getWeatherImoticon(this.props.currentWeather.currentIcon)}${getWeatherCondition(this.props.currentWeather.currentIcon)}!!
+🌡현재온도 : ${this.props.currentWeather.currentTemp.toFixed(1)}
+🌡어제보다 ${Math.abs(tempDiff).toFixed(1)}℃ ${tempDiff>0 ? '↑' : '↓'}
+🌫미세 : ${getPmImoticon(this.props.dust.pm10Value, 0)}(${getPmCondition(this.props.dust.pm10Value, 0)}:${this.props.dust.pm10Value}㎍/m³)
+🌫초미세 : ${getPmImoticon(this.props.dust.pm25Value, 1)}(${getPmCondition(this.props.dust.pm25Value, 1)}:${this.props.dust.pm25Value}㎍/m³)
+자외선이 강한 날이에요. 반팔 입고 꼭 썬크림 바르세요!`,
+        });
+        if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+        }
+        else if (result.action === Share.dismissedAction) {
+            // dismissed
+        }
+    }
 
     render() {
         const {address, currentWeather, weather1, weather0, dust} = this.props;
@@ -35,7 +61,8 @@ class HomeScreen extends Component {
                                 <HomeHead
                                     style={styles.homeHead}
                                     address={address}
-                                    onButtonPressed={this.openDrawer}
+                                    onDrawerButtonPressed={this.openDrawer}
+                                    onShareButtonPressed={this.shareWeather}
                                 />
                                 <WeatherInfo 
                                     tempNow={currentWeather.currentTemp} 
