@@ -51,11 +51,17 @@ const styles = StyleSheet.create({
         color : 'white',
    },
    conditionContainer : {
-         width:"90%",
+        width:"94%",
         flexDirection : 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop : "4%",
+        paddingTop : "2%",
+        paddingLeft : "4%",
+        paddingRight : "4%",
+        paddingBottom : "7%",
+        backgroundColor : 'rgba(255, 255, 255, 0.15)',
+        borderRadius:10,
    },
    weatherCondition : {
         flexDirection : 'row',
