@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Dimensions, Share, StyleSheet, ScrollView, Text, View} from 'react-native';
+import {Dimensions, Share, StyleSheet, ScrollView, Text, View, Platform} from 'react-native';
 import {connect} from 'react-redux';
 
 import Drawer from 'react-native-drawer'
 import LinearGradient from 'react-native-linear-gradient'
+import LottieView from 'lottie-react-native'
 
 import DrawerPanel from '../DrawerPanel/DrawerPanel'
 import HomeHead from './HomeHead'
@@ -70,7 +71,16 @@ class HomeScreen extends Component {
                                     pm25 = {dust.pm25Value}
                                 />
                                 <Closet/>
+                                <Text style={{color:'white', fontSize:13}}>
+                                    Powerd by <Text style={{fontWeight:"bold"}}>Dark Sky, Air Korea</Text>
+                                </Text>
                             </View>
+                            <LottieView
+                                source = {require('../../assets/effects/rain.json')}
+                                autoPlay
+                                loop
+                                imageAssetsFolder={'images'}
+                            />
                         </LinearGradient>
                     </ScrollView>
                 </Drawer>
@@ -79,10 +89,14 @@ class HomeScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    container : {
+        marginTop: (Platform.OS === 'ios') ? 20 : 0
+    },
     wrapper : {
         width: "100%",
         paddingTop : "8%",
         alignItems: "center",
+        paddingBottom : "8%",
     },
     homeHead : {
         height: "15%",

@@ -1,30 +1,67 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, Text, Animated, PermissionsAndroid} from 'react-native'
+import {
+    StyleSheet, 
+    Text,
+    View,
+    Animated, 
+    PermissionsAndroid, 
+    LayoutAnimation, 
+    UIManager, 
+    Platform, 
+    Dimensions,
+    ToastAndroid,
+    BackHandler
+} from 'react-native'
 
 import Geolocation from 'react-native-geolocation-service'
 import {connect} from 'react-redux'
 import AsyncStorage from '@react-native-community/async-storage'
+import Button from 'apsl-react-native-button'
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
 import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
+import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
 
 class SplashScreen extends Component {
     state = {
         isLoaded : false,
         AnimateDone : false,
         UserInfoPrepared : false,
+        choiceStart : false,
+        selecteGender : null,
     }
 
-    async componentWillMount() {
+    constructor(){
+        super();
+        if(Platform.OS === 'android')
+        {
+            UIManager.setLayoutAnimationEnabledExperimental(true)
+        }
+    }
+
+    componentWillMount = async() => {
+        this.colorAnimateValue = new Animated.Value(0);
+
         this._getUserInfo()
         LocationPermission = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION)
         if(LocationPermission === PermissionsAndroid.RESULTS.GRANTED) {
             this.getLocation()
         }
         const done = await this.readyFor2500ms()
+        if(!this.state.UserInfoPrepared)
+            this.animateToChoiceLayout()
         if(done!==null) {
             this.setState({AnimateDone : true})
+            console.log(this.state)
         }
+    }
+
+    componentDidMount = () => {
+        Animated.timing(this.colorAnimateValue, {
+            toValue : 150,
+            duration : 1000,
+            delay : 500,
+        }).start()
     }
 
     readyFor2500ms = async() => {
@@ -38,9 +75,41 @@ class SplashScreen extends Component {
 
     componentDidUpdate() {
         if(this.state.AnimateDone) {
-            if(this.state.isLoaded)
+            if(this.state.isLoaded) {
+                if(!this.state.UserInfoPrepared) {
+                    return
+                }
                 this.props.navigation.navigate('App')
+            }
+            else {
+                ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시 후 다시 시도해주세요.', ToastAndroid.SHORT)
+                BackHandler.exitApp()
+            }
         }   
+    }
+
+    animateToChoiceLayout = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+        this.setState({choiceStart:true})
+    }
+
+    onMalePress = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        this.setState({selecteGender : 'm'})
+    }
+
+    onFemalePress = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+        this.setState({selecteGender : 'f'})
+    }
+
+    onSubmitPress = () => {
+        AsyncStorage.setItem(this.state.selecteGender)
+        AsyncStorage.setItem('bias', '0')
+        this.props.onSetCurrentGender(this.state.selecteGender)
+        this.props.onSetCurrentBias(0)
+        this.setState({UserInfoPrepared : true})
+        console.log(this.state)
     }
 
     getLocation = () => {
@@ -70,7 +139,6 @@ class SplashScreen extends Component {
             let responseJson = await response.json();
             const address =  responseJson.results[0].address_components[2].long_name + ' ' + responseJson.results[0].address_components[1].long_name
             this.props.onSetAddress(address);
-            console.log(responseJson);
         }
         catch (error) {
             console.error(error);
@@ -143,10 +211,8 @@ class SplashScreen extends Component {
             .then(this.fetch_retry(`https://sgisapi.kostat.go.kr/OpenAPI3/auth/authentication.json?consumer_key=${sgisKey_ID}&consumer_secret=${sgisKey_SECRET}`, 10)
                 .then(response3 => response3.json()) // 응답값을 json으로 변환
                 .then(json3 => {
-                    this.fetch_retry(`https://sgisapi.kostat.go.kr/OpenAPI3/transformation/transcoord.json?accessToken=${json3.result.accessToken}&src=4326&dst=5181&posX=${longitude}&posY=${latitude}`, 10)
-                    .then(response4 => response4.json())
+                    this.fetch_forSGIS(`https://sgisapi.kostat.go.kr/OpenAPI3/transformation/transcoord.json?accessToken=${json3.result.accessToken}&src=4326&dst=5181&posX=${longitude}&posY=${latitude}`, 10)
                     .then(json4 => {
-                        console.log(json4);
                         this.props.onSetTmX(json4.result.posX);
                         this.props.onSetTmY(json4.result.posY);
                         this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${airkoreaKey}&tmX=${json4.result.posX}&tmY=${json4.result.posY}&_returnType=json`, 10)
@@ -168,8 +234,9 @@ class SplashScreen extends Component {
     _getUserInfo = async () => {
         try {
             const userGender = await AsyncStorage.getItem('gender')
-            if(userGender !== null) {
+            if(userGender !== null) { // userInfo 존재
                 let userBias = await AsyncStorage.getItem('bias')
+                userBias = '0'
                 if(userBias === null) {
                     await AsyncStorage.setItem('bias', '0')
                     userBias = '0'
@@ -178,43 +245,139 @@ class SplashScreen extends Component {
                 this.props.onSetCurrentBias(Number(userBias))
                 this.setState({UserInfoPrepared : true})
             }
-            else {
-                // gender 선택창을 띄운다.
-            }
         } catch(e) {
-            // reading error
+            this._getUserInfo()
         }
     }
 
-    fetch_retry = (url, n) => fetch(url).catch(function(error) {
-        if (n === 1) throw error;
-        return fetch_retry(url, n - 1);
-    });
+    fetch_retry = (url, n) => fetch(url).then((response) => {
+        if (response == 'undefined')
+            return fetch_retry(url, n - 1)
+        else
+            return response
+    })
 
-    _getLogoStyle() {
-        return {
-            width: 128, height:128,
-            opacity: 1,
-        }
-    }
+    fetch_forSGIS = (url, n) => fetch(url).then(response => response.json())
+    .then(json => {
+        if (json.errMsg != 'Success')
+            return this.fetch_forSGIS(url, n - 1)
+        else
+            return json
+    })
 
     render() {
+        const window = Dimensions.get('window')
+        const logoColor = this.colorAnimateValue.interpolate( {
+            inputRange : [0, 150],
+            outputRange : ['#00C1DE', '#FFFFFF']
+        })
+        const screenColor = this.colorAnimateValue.interpolate( {
+            inputRange : [0, 150],
+            outputRange : ['#FFFFFF', '#00C1DE']
+        })
+        const logoScreenAnimate = this.state.choiceStart ? {
+            backgroundColor : screenColor,
+            borderRadius: window.width * 0.7,
+            width: window.width * 1.4,
+            height: window.width * 1.4,
+            marginLeft: -(window.width * 0.2),
+            marginBottom : window.width * 0.8,
+            position: 'absolute',
+            bottom: 0,
+            overflow: 'hidden',
+            paddingBottom : "5%",
+        } : {
+            backgroundColor : screenColor
+        }
+        const choiceScreenAnimate = this.state.choiceStart ? {
+            backgroundColor : 'white',
+            height: "100%",
+            marginBottom:"-110%",
+            position: 'absolute',
+            bottom:0,
+        } : {
+            backgroundColor : screenColor
+        }
+        const logoAnimate = {
+            tintColor : logoColor
+        }
+        const textAnimate = this.state.choiceStart ? {
+            color : screenColor
+        } : {
+            color : logoColor
+        }
+        const bgTopAnimate = this.state.choiceStart ? {
+            backgroundColor : screenColor,
+            width: window.width,
+            height: "15%",
+        } : {
+            backgroundColor : screenColor,
+            width: window.width,
+            height: "100%",
+            position: 'absolute',
+            bottom:0,
+        }
+        const maleButton = (this.state.selecteGender === 'm') ? {
+            backgroundColor : '#00C1DE',
+            borderColor : '#00C1DE',
+        } : null
+        const maleButtonText = (this.state.selecteGender === 'm') ? {
+            color : 'white'
+        } : null
+        const femaleButton = (this.state.selecteGender === 'f') ? {
+            backgroundColor : '#00C1DE',
+            borderColor : '#00C1DE',
+        } : null
+        const femaleButtonText = (this.state.selecteGender === 'f') ? {
+            color : 'white'
+        } : null
         return (
             <Animated.View style={styles.container}>
-                <View style={styles.logoContainer}>
+                <Animated.View style={bgTopAnimate}>
+                    <Text> </Text>
+                </Animated.View>
+                <Animated.View style={[styles.logoContainer, logoScreenAnimate]}>
                     <Animated.Image
-                        style={this._getLogoStyle()}
-                        source={require('../../assets/images/logo.png')}
+                        style={[styles.logoImgStyle, logoAnimate]}
+                        source={require('../../assets/images/logo/logo_white.png')}
+                        resizeMode="stretch"
                     />
-                </View>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.titleTextKOR}>
+                    <Animated.Text style={[styles.titleTextKOR, textAnimate]}>
                         하늘 옷장
-                    </Text>
-                    <Text style={styles.titleTextENG}>
+                    </Animated.Text>
+                    <Animated.Text style={[styles.titleTextENG, textAnimate]}>
                         SKY CLOSET
-                    </Text>
-                </View>
+                    </Animated.Text>
+                </Animated.View>
+                <Animated.View style={[styles.choiceContainer, choiceScreenAnimate]}>
+                    {(this.state.choiceStart) && (
+                    <Animated.View style={styles.choiceView}>
+                        <Text style={styles.choiceText}>
+                            당신의 성별을 선택해주세요.
+                        </Text>
+                        <Button style={[styles.button, maleButton]} textStyle={[styles.buttonText, maleButtonText]} onPress={this.onMalePress}>
+                            남자
+                        </Button>
+                        <View style={{height:"4%"}}></View>
+                        <Button style={[styles.button, femaleButton]} textStyle={[styles.buttonText, femaleButtonText]} onPress={this.onFemalePress}>
+                            여자
+                        </Button>
+                        <View style={{height:"4%"}}></View>
+                        {(!this.state.selecteGender) && (
+                            <View style={{height:"10%"}}></View>
+                        )}
+                        {(this.state.selecteGender) && (
+                            <Button 
+                                style={{height:"10%", borderRadius:0, backgroundColor:"#0F77ED", 
+                                borderColor : '#0F77ED'}} 
+                                textStyle={{color:"white"}}
+                                onPress={this.onSubmitPress}>
+                                시작하기!
+                            </Button>
+                        )}
+                    </Animated.View>
+                    )}
+                </Animated.View>
             </Animated.View>
         );
     }
@@ -223,31 +386,54 @@ class SplashScreen extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor : 'rgb(0, 193, 222)'
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        backgroundColor : 'white',
+        marginTop: (Platform.OS === 'ios') ? 20 : 0
     },
     logoContainer: {
-        height: '70%',
+        height:"60%",
+        width:"100%",
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
+        paddingBottom : "13.5%",
     },
-    titleContainer: {
-        height: '30%',
+    logoImgStyle : {
+        width: 128,
+        height: 128,
+        marginBottom : "3%",
+    },
+    choiceContainer: {
+        width:"100%",
+        height:"40%",
         alignItems: 'center',
-        justifyContent: 'center',
     },
     titleTextKOR: {
-        fontSize : 23,
+        fontSize : 20,
         fontFamily : "LogoKOR-Medium",
-        color : '#00C1DE',
         marginBottom : 10,
     },
     titleTextENG: {
-        fontSize : 20,
+        fontSize : 15,
         fontFamily : "LogoENG-Medium",
-        color : '#00C1DE',
     },
+    choiceView : {
+        alignItems : "center"
+    },
+    choiceText : {
+        fontSize : 18,
+        marginBottom : "8%",
+    },
+    button : {
+        width : "80%",
+        height : "15.5%",
+        borderRadius : 0,
+        borderColor : '#707070',
+    },
+    buttonText : {
+        fontSize : 15,
+        fontFamily : "Bongodik"
+    }
 });
 
 const mapStateToProps = state => {
