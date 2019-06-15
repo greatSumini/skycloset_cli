@@ -37,9 +37,8 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 
 ### Screenshots
 
-(스크린샷 변경하기)
-<img src="screenshots/home_grid_framed.png" width="25%" />
-<img src="screenshots/post_story_framed.png" width="25%" />
+<img src="screenshots/splash.png" width="25%" />
+<img src="screenshots/home_top.png" width="25%" />
 <img src="screenshots/dn_story_framed.png" width="25%" />
 <img src="screenshots/dribbble_shot_framed.png" width="25%" />
 
@@ -61,6 +60,12 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 Skycloset is a small project for Demoday of CEOS, so it has limited manpower and time. In order to fully implement the features required to run the app under these conditions, it explicitly does not attempt to:
 * Supports **IOS** environments; Doing so is entirely possible, but complicates things.
 * Support **pre-JellyBean** devices; React Native apps target iOS 9.0 and Android 4.1 (API 16) or newer.
+
+
+### Made by
+* DESIGN : [Yeongmi Yun](https://github.com/Mimimiiim)
+* DEV : [Sumin Choi](https://github.com/orange-mush)
+* PLANNER : Jiyeon Lee, Haewon Seong
 
 
 ### License
