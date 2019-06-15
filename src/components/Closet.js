@@ -10,7 +10,8 @@ export default class Closet extends Component {
             <View style={styles.container}>
                 <ImageBackground 
                     source={getClosetBgImg()} 
-                    style={styles.imgbg}>
+                    style={styles.imgbg}
+                    resizeMode="stretch">
                     <View style={styles.clothContainer}>
                         <Cloth />
                         <Cloth />
@@ -23,16 +24,17 @@ export default class Closet extends Component {
 
 const styles = StyleSheet.create({
     container : {
-        marginTop : "8%",
+        marginTop : "4.5%",
         width:"100%",
     },
     imgbg : {
         width:"100%",
-        height: Dimensions.get('window').height * 0.51,
+        height: Dimensions.get('window').height * 0.50,
     },
     clothContainer: {
         flex:1,
-        paddingStart:20,
+        paddingTop: "3.5%",
+        paddingStart:"3%",
         flexDirection:'row-reverse',
     }
 })

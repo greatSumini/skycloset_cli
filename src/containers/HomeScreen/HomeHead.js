@@ -3,7 +3,7 @@ import {View, Image, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedbac
 
 export default class HomeHead extends Component {
     render() {
-        const {address, onDrawerButtonPressed, onShareButtonPressed} = this.props;
+        const {address, onDrawerButtonPressed, onShareButtonPressed, onAddressPressed} = this.props;
         return (
             <View style={styles.container}>
                 <TouchableOpacity 
@@ -15,19 +15,22 @@ export default class HomeHead extends Component {
                         source={require('../../assets/images/button/drawerButton.png')}
                     />
                 </TouchableOpacity>
-                <TouchableWithoutFeedback 
-                    style={styles.addressContainer}>
-                    <View style={styles.addressContainer}>
-                        <Text style={styles.titletText}>
-                            {address}
-                        </Text>
-                        <Image
-                            style={styles.smallButton}
-                            resizeMode='stretch'
-                            source={require('../../assets/images/button/geoButton.png')}
-                        />
-                    </View>
-                </TouchableWithoutFeedback>
+                <View 
+                    style={{flex:7, marginTop:0.3, alignItems : "center", justifyContent : "center",}}>
+                    <TouchableWithoutFeedback
+                        onPress={onAddressPressed}>
+                        <View style={styles.addressContainer}>
+                            <Text style={styles.titletText}>
+                                {address}
+                            </Text>
+                            <Image
+                                style={styles.smallButton}
+                                resizeMode='stretch'
+                                source={require('../../assets/images/button/geoButton.png')}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
+                </View>
                 <TouchableOpacity 
                     onPress={onShareButtonPressed}
                     style={styles.menuButtonRight}>
@@ -54,8 +57,6 @@ const styles = StyleSheet.create({
         marginBottom : 11,
     },
     addressContainer : {
-        flex:7,
-        marginTop : 0.3,
         flexDirection : "row",
         alignItems : "center",
         justifyContent : "center",

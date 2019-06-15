@@ -2,9 +2,14 @@ import { createSwitchNavigator, createStackNavigator, createAppContainer } from 
 
 import HomeScreen from './src/containers/HomeScreen/HomeScreen';
 import SplashScreen from './src/containers/SplashScreen/SplashScreen';
+import GeoScreen from './src/containers/GeoScreen/GeoScreen'
 
-const AppStack = createSwitchNavigator({
-  Home: HomeScreen
+const AppStack = createStackNavigator({
+  Home: HomeScreen,
+  Geo : GeoScreen,
+},
+{
+  initialRouteName: 'Home',
 });
 
 export default createAppContainer(createSwitchNavigator(

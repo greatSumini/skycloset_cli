@@ -31,5 +31,6 @@ const styles = StyleSheet.create({
         marginTop : "15%",
         fontFamily : 'Bongodik',
         fontSize : 15,
+        color : 'white',
     }
 });

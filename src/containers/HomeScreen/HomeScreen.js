@@ -10,12 +10,19 @@ import DrawerPanel from '../DrawerPanel/DrawerPanel'
 import HomeHead from './HomeHead'
 import WeatherInfo from './WeatherInfo'
 import Closet from '../../components/Closet'
+import MiniWeather from './MiniWeather'
+import WeeklyWeather from './WeeklyWeather'
+
 import {getHomeBgColor} from './getBgColor'
 import {getPmCondition, getPmImoticon} from './getDustInfo'
 import {getWeatherCondition, getWeatherImoticon} from './getWeatherInfo'
 
 class HomeScreen extends Component {
-    openDrawer = async () => {
+    static navigationOptions = {
+        header: null,
+    }
+
+    openDrawer = () => {
         this._drawer.open()
     }
 
@@ -43,6 +50,10 @@ class HomeScreen extends Component {
         }
     }
 
+    openGeoScreen = () => {
+        this.props.navigation.push('Geo')
+    }
+
     render() {
         const {address, currentWeather, weather1, weather0, dust} = this.props;
         return (
@@ -56,10 +67,10 @@ class HomeScreen extends Component {
                         <LinearGradient colors={getHomeBgColor()} style={styles.linearGradient}>
                             <View style={styles.wrapper}>
                                 <HomeHead
-                                    style={styles.homeHead}
                                     address={address}
                                     onDrawerButtonPressed={this.openDrawer}
                                     onShareButtonPressed={this.shareWeather}
+                                    onAddressPressed={this.openGeoScreen}
                                 />
                                 <WeatherInfo 
                                     tempNow={currentWeather.currentTemp} 
@@ -71,16 +82,32 @@ class HomeScreen extends Component {
                                     pm25 = {dust.pm25Value}
                                 />
                                 <Closet/>
+                                <View style={styles.compContainer}>
+                                    <View style={styles.compTitleContainer}>
+                                        <Text style={styles.compTitle}>
+                                            내일 모레
+                                        </Text>
+                                    </View>
+                                    <View style={styles.compCompContainer}>
+                                        <MiniWeather />
+                                        <View style={{width:"2%"}}></View>
+                                        <MiniWeather />
+                                    </View>
+                                </View>
+                                <View style={styles.compContainer}>
+                                    <View style={styles.compTitleContainer}>
+                                        <Text style={styles.compTitle}>
+                                            주간 예보
+                                        </Text>
+                                    </View>
+                                    <View style={styles.compCompContainer}>
+                                        <WeeklyWeather />
+                                    </View>
+                                </View>
                                 <Text style={{color:'white', fontSize:13}}>
                                     Powerd by <Text style={{fontWeight:"bold"}}>Dark Sky, Air Korea</Text>
                                 </Text>
                             </View>
-                            <LottieView
-                                source = {require('../../assets/effects/rain.json')}
-                                autoPlay
-                                loop
-                                imageAssetsFolder={'images'}
-                            />
                         </LinearGradient>
                     </ScrollView>
                 </Drawer>
@@ -98,9 +125,32 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingBottom : "8%",
     },
-    homeHead : {
-        height: "15%",
+    compContainer : {
+        paddingLeft: "2%",
+        paddingRight: "2%",
+        marginBottom: "8%",
     },
+    compTitleContainer : {
+        width:"100%",
+        paddingLeft: "5%",
+        flexDirection : "row",
+        alignItems : "center",
+        justifyContent : "center",
+        marginBottom: "3.5%",
+    },
+    compCompContainer : {
+        width:"100%",
+        height: 250,
+        flexDirection : "row",
+        alignItems : "center",
+        justifyContent : "center",
+    },
+    compTitle : {
+        width: "100%",
+        textAlign : "left",
+        color: "white",
+        fontSize : 17,
+    }
 });
 
 const mapStateToProps = state => {
