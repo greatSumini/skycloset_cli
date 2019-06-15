@@ -14,11 +14,12 @@
     <img alt="Github : orange-mush" src="https://img.shields.io/github/followers/orange-mush.svg?label=Follow&style=social" target="_blank" />
   </a>
 </p>
-React-Native based
 
 👍 Comments and new issues created are welcomed.
 
 🛑 We're currently not accepting external PRs that touch on the app's architecture.
+
+> React-Native based / For Android only
 
 ---
 

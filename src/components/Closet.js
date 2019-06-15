@@ -24,7 +24,7 @@ export default class Closet extends Component {
 
 const styles = StyleSheet.create({
     container : {
-        marginTop : "4.5%",
+        marginTop : "2.0%",
         width:"100%",
     },
     imgbg : {

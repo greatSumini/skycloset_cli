@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
     condition : { // medium
         fontSize : 15,
         color : 'white',
-        marginBottom : "10%",
         fontFamily : "Bongodik-Medium",
+        lineHeight : 35,
+        textAlignVertical : "top",
     },
     diff : {
         fontSize : 11,
