@@ -10,8 +10,8 @@
   <a href="https://github.com/orange-mush/skycloset_cli/blob/master/LICENSE">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
   </a>
-  <a href="https://twitter.com/FranckAbgrall">
-    <img alt="Twitter: FranckAbgrall" src="https://img.shields.io/twitter/follow/FranckAbgrall.svg?style=social" target="_blank" />
+  <a href="https://github.com/orange-mush">
+    <img alt="Github : orange-mush" src="https://img.shields.io/github/followers/orange-mush.svg?label=Follow&style=social" target="_blank" />
   </a>
 </p>
 React-Native based
