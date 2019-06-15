@@ -1,7 +1,7 @@
 export const getHomeBgColor = () => {
     hour = new Date().getHours();
     if(hour>=0&&hour<5) // 밤 [0, 5)
-        return ['#0D1F53', '#121D3C']
+        return ['#0D1F53', '#141F3E']
     if(hour>=5&&hour<6) // 새벽 [5, 6)
         return ['#3C4F7E', '#EFD09E']
     if(hour>=6&&hour<8) // 아침 [6, 8)

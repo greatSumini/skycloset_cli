@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     },
     compTitleContainer : {
         width:"100%",
-        paddingLeft: "5%",
+        paddingLeft: "6.4%",
         flexDirection : "row",
         alignItems : "center",
         justifyContent : "center",
