@@ -1,5 +1,19 @@
 # \[ 🚧 Work in progress 👷‍♀️⛏👷🔧 🚧 \] SkyCloset 1.0 
-
+<p align="center">
+  <img src="https://img.shields.io/badge/version-0.0.0-blue.svg?cacheSeconds=2592000" />
+  <a href="https://github.com/orange-mush/skycloset_cli#readme">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
+  </a>
+  <a href="https://github.com/orange-mush/skycloset_cli/graphs/commit-activity">
+    <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" target="_blank" />
+  </a>
+  <a href="https://github.com/orange-mush/skycloset_cli/blob/master/LICENSE">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" target="_blank" />
+  </a>
+  <a href="https://twitter.com/FranckAbgrall">
+    <img alt="Twitter: FranckAbgrall" src="https://img.shields.io/twitter/follow/FranckAbgrall.svg?style=social" target="_blank" />
+  </a>
+</p>
 React-Native based
 
 👍 Comments and new issues created are welcomed.
@@ -13,7 +27,7 @@ React-Native based
 (gif변경하기)
 <img src="screenshots/plaid_demo.gif" width="300" align="right" hspace="20">
 
-*Recommend clothes for today's weather*
+> *Recommend clothes for today's weather*
 
 Skycloset is the closest md to making your day pleasant. At the beginning of the day, it gives brief weather information and recommends clothes with the appropriate thickness for today's wear. You can check this by time zone. Also, at the end of the day, this app receives the satisfaction of the day and grows every day to suit you better.
 
@@ -38,7 +52,9 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 
 ### API services
 1. [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/start)
-2. [OpenWeatherMap - Current weather data](https://openweathermap.org/current)
+2. [Darky Sky](https://darksky.net/dev)
+3. [Air Korea](http://openapi.airkorea.or.kr/)
+4. [SGIS Open API](https://sgis.kostat.go.kr/developer/html/home.html)
 
 
 ### Non-Goals
