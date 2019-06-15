@@ -29,18 +29,27 @@
 
 > *Recommend clothes for today's weather*
 
-Skycloset is the closest md to making your day pleasant. At the beginning of the day, it gives brief weather information and recommends clothes with the appropriate thickness for today's wear. You can check this by time zone. Also, at the end of the day, this app receives the satisfaction of the day and grows every day to suit you better.
+'Skycloset' is a closest MD which makes your day pleasant. At the beginning of the day, it gives brief weather information and recommends clothes with the appropriate thickness for today's wear. You can check this by time zone. Also, at the end of the day, this app receives satisfaction from the day and grows every day to suit you better.
 
 **[Install on Google Play (Beta Testing)](https://play.google.com/apps/testing/io.plaidapp)**
 (링크 변경해야함)
 
 
+### Made by
+* DESIGN : [Yeongmi Yun](https://github.com/Mimimiiim)
+* DEV : [Sumin Choi](https://github.com/orange-mush)
+* PLANNER : Jiyeon Lee, Haewon Seong
+
+
+### Non-Goals
+Skycloset is a small project for Demoday of CEOS, so it has limited manpower and time. In order to fully implement the features required to run the app under these conditions, it explicitly does not attempt to:
+* Supports **IOS** environments; Doing so is entirely possible, but complicates things.
+* Support **pre-JellyBean** devices; React Native apps target iOS 9.0 and Android 4.1 (API 16) or newer.
+
+
 ### Screenshots
 
-<img src="screenshots/splash.png" width="25%" />
-<img src="screenshots/home_top.png" width="25%" />
-<img src="screenshots/dn_story_framed.png" width="25%" />
-<img src="screenshots/dribbble_shot_framed.png" width="25%" />
+<img src="screenshots/splash.png" width="25%" />  <img src="screenshots/home_top.png" width="25%" />
 
 
 ### Libraries
@@ -54,18 +63,6 @@ Skycloset is the closest md to making your day pleasant. At the beginning of the
 2. [Darky Sky](https://darksky.net/dev)
 3. [Air Korea](http://openapi.airkorea.or.kr/)
 4. [SGIS Open API](https://sgis.kostat.go.kr/developer/html/home.html)
-
-
-### Non-Goals
-Skycloset is a small project for Demoday of CEOS, so it has limited manpower and time. In order to fully implement the features required to run the app under these conditions, it explicitly does not attempt to:
-* Supports **IOS** environments; Doing so is entirely possible, but complicates things.
-* Support **pre-JellyBean** devices; React Native apps target iOS 9.0 and Android 4.1 (API 16) or newer.
-
-
-### Made by
-* DESIGN : [Yeongmi Yun](https://github.com/Mimimiiim)
-* DEV : [Sumin Choi](https://github.com/orange-mush)
-* PLANNER : Jiyeon Lee, Haewon Seong
 
 
 ### License
