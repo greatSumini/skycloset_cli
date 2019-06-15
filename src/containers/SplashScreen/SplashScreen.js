@@ -104,7 +104,7 @@ class SplashScreen extends Component {
     }
 
     onSubmitPress = () => {
-        AsyncStorage.setItem(this.state.selecteGender)
+        AsyncStorage.setItem('gender', this.state.selecteGender)
         AsyncStorage.setItem('bias', '0')
         this.props.onSetCurrentGender(this.state.selecteGender)
         this.props.onSetCurrentBias(0)
@@ -231,12 +231,11 @@ class SplashScreen extends Component {
             )
     }
 
-    _getUserInfo = async () => {
+    _getUserInfo = async () => {/*
         try {
             const userGender = await AsyncStorage.getItem('gender')
             if(userGender !== null) { // userInfo 존재
                 let userBias = await AsyncStorage.getItem('bias')
-                userBias = '0'
                 if(userBias === null) {
                     await AsyncStorage.setItem('bias', '0')
                     userBias = '0'
@@ -247,7 +246,22 @@ class SplashScreen extends Component {
             }
         } catch(e) {
             this._getUserInfo()
-        }
+        }*/
+        AsyncStorage.getItem('gender')
+        .then(userGender => {
+            if(userGender !== null) { // userInfo 존재
+                AsyncStorage.getItem('bias')
+                .then(userBias => {
+                    if(userBias === null) {
+                        AsyncStorage.setItem('bias', '0')
+                        userBias = '0'
+                    }
+                    this.props.onSetCurrentGender(userGender)
+                    this.props.onSetCurrentBias(Number(userBias))
+                    this.setState({UserInfoPrepared : true})
+                })
+            }
+        })
     }
 
     fetch_retry = (url, n) => fetch(url).then((response) => {
