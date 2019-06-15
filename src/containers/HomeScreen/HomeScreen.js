@@ -55,7 +55,7 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const {address, currentWeather, weather1, weather0, dust} = this.props;
+        const {address, currentWeather, weather1, weather0, dust, weekWeather} = this.props;
         return (
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
@@ -101,7 +101,7 @@ class HomeScreen extends Component {
                                         </Text>
                                     </View>
                                     <View style={styles.compCompContainer}>
-                                        <WeeklyWeather />
+                                        <WeeklyWeather weekInfo={weekWeather}/>
                                     </View>
                                 </View>
                                 <Text style={{color:'white', fontSize:13}}>
@@ -160,6 +160,7 @@ const mapStateToProps = state => {
         weather1: state.weather.weather1,
         weather2: state.weather.weather2,
         weather3: state.weather.weather3,
+        weekWeather : state.weather.weekWeather,
         currentBias : state.current.currentBias,
         currentGender : state.current.currentGender,
         currentWeather : state.current.currentWeather,

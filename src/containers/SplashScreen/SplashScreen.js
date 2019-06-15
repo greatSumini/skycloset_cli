@@ -18,7 +18,7 @@ import {connect} from 'react-redux'
 import AsyncStorage from '@react-native-community/async-storage'
 import Button from 'apsl-react-native-button'
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setWeekWeather, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
 import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
 
@@ -154,6 +154,7 @@ class SplashScreen extends Component {
         this.fetch_retry(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude}?exclude=minutely,alerts,flags&units=si`, 10)
             .then(response => response.json()) // 응답값을 json으로 변환
             .then(json => {
+                console.log(json)
                 this.props.onSetCurrentWeather({
                     currentTemp :json.currently.temperature,
                     currentTempApparent : json.currently.apparentTemperature,
@@ -192,6 +193,15 @@ class SplashScreen extends Component {
                     icon : json.daily.data[2].icon,
                     cloudCover : json.daily.data[2].cloudCover,
                 });
+                let weekWeather = []
+                for(let i = 0;i<8;++i) {
+                    weekWeather.push({
+                        min : json.daily.data[i].temperatureMin,
+                        max : json.daily.data[i].temperatureMax,
+                        icon : json.daily.data[i].icon,
+                    })
+                }
+                this.props.onSetWeekWeather(weekWeather)
             })
             .then(this.fetch_retry(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`, 10)
                 .then(response2 => response2.json()) // 응답값을 json으로 변환
@@ -480,6 +490,7 @@ const mapDispatchToProps = dispatch => {
         onSetWeather1 : (weather1) => dispatch(setWeather1(weather1)),
         onSetWeather2 : (weather2) => dispatch(setWeather2(weather2)),
         onSetWeather3 : (weather3) => dispatch(setWeather3(weather3)),
+        onSetWeekWeather : (weekWeather) => dispatch(setWeekWeather(weekWeather)),
         onSetCurrentBias : (currentBias) => dispatch(setCurrentBias(currentBias)),
         onSetCurrentGender : (currentGender) => dispatch(setCurrentGender(currentGender)),
         onSetCurrentWeather : (currentWeather) => dispatch(setCurrentWeather(currentWeather)),

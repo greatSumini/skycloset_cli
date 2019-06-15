@@ -1,5 +1,5 @@
 # \[ 🚧 Work in progress 👷‍♀️⛏👷🔧 🚧 \] SkyCloset 1.0 
-<p align="center">
+<p>
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/orange-mush/skycloset_cli#readme">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
@@ -25,7 +25,6 @@
 
 # SkyCloset 1.0
 
-(gif변경하기)
 <img src="screenshots/skycloset_splash.gif" width="300" align="right" hspace="20">
 
 > *Recommend clothes for today's weather*
