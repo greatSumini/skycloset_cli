@@ -60,8 +60,9 @@ class HomeScreen extends Component {
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
                     content={<DrawerPanel />}
-                    openDrawerOffset={0.4}
+                    openDrawerOffset={0.7}
                     tapToClose={true}
+                    tweenDuration={150}
                     >
                     <ScrollView style={styles.container}>
                         <LinearGradient colors={getHomeBgColor()} style={styles.linearGradient}>
@@ -100,7 +101,7 @@ class HomeScreen extends Component {
                                             주간 예보
                                         </Text>
                                     </View>
-                                    <View style={styles.compCompContainer}>
+                                    <View style={[styles.compCompContainer, {height : 350}]}>
                                         <WeeklyWeather weekInfo={weekWeather}/>
                                     </View>
                                 </View>
