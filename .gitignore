@@ -57,4 +57,4 @@ buck-out/
 *.jsbundle
 
 # Secret Info
-config/
+keys.js

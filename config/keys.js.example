@@ -1,0 +1,5 @@
+export const googleMapsKey = '********' 
+export const darkSkyKey = '********' 
+export const sgisKey_ID = '********' 
+export const sgisKey_SECRET = '********' 
+export const airkoreaKey = '********' 

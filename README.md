@@ -36,9 +36,9 @@
 
 
 ### Made by
-* DESIGN : [Yeongmi Yun](https://github.com/Mimimiiim)
+* DESIGN : [Yeongmi Yoon](https://github.com/Mimimiiim)
 * DEV : [Sumin Choi](https://github.com/orange-mush)
-* PLANNER : Jiyeon Lee, Haewon Seong
+* PLANNER : Jiyun Lee, Haewon Seong
 
 
 ### Non-Goals
@@ -60,7 +60,7 @@ Skycloset is a small project for Demoday of CEOS, so it has limited manpower and
 
 ### API services
 1. [Google Geocoding API](https://developers.google.com/maps/documentation/geocoding/start)
-2. [Darky Sky](https://darksky.net/dev)
+2. [Dark Sky](https://darksky.net/dev)
 3. [Air Korea](http://openapi.airkorea.or.kr/)
 4. [SGIS Open API](https://sgis.kostat.go.kr/developer/html/home.html)
 
