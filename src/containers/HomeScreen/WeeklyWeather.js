@@ -61,8 +61,9 @@ export default class WeeklyWeather extends Component {
     }
 
     render() {
+        const {bg} = this.props
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor : bg}]}>
                 <View style={styles.row}>
                     {this.createDayInfos()}
                 </View>
@@ -76,7 +77,6 @@ const styles = StyleSheet.create({
         width : "92%",
         height : "100%",
         borderRadius: 15,
-        backgroundColor : 'rgba(10, 10, 10, 0.5)',
         paddingTop : "4.5%",
     },
     row : {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     },
     icon : {
         marginTop : "18%",
-        height: "10%",
+        height: "9.5%",
         width : "100%",
     },
     circle : {

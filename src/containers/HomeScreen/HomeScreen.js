@@ -56,6 +56,7 @@ class HomeScreen extends Component {
 
     render() {
         const {address, currentWeather, weather1, weather0, dust, weekWeather} = this.props;
+        const compBg = 'rgba(10, 10, 10, 0.3)'
         return (
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
@@ -90,9 +91,9 @@ class HomeScreen extends Component {
                                         </Text>
                                     </View>
                                     <View style={styles.compCompContainer}>
-                                        <MiniWeather />
+                                        <MiniWeather bg={compBg}/>
                                         <View style={{width:"2%"}}></View>
-                                        <MiniWeather />
+                                        <MiniWeather bg={compBg}/>
                                     </View>
                                 </View>
                                 <View style={styles.compContainer}>
@@ -102,7 +103,7 @@ class HomeScreen extends Component {
                                         </Text>
                                     </View>
                                     <View style={[styles.compCompContainer, {height : 350}]}>
-                                        <WeeklyWeather weekInfo={weekWeather}/>
+                                        <WeeklyWeather weekInfo={weekWeather} bg={compBg}/>
                                     </View>
                                 </View>
                                 <Text style={{color:'white', fontSize:13}}>

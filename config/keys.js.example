@@ -3,3 +3,5 @@ export const darkSkyKey = '********'
 export const sgisKey_ID = '********' 
 export const sgisKey_SECRET = '********' 
 export const airkoreaKey = '********' 
+
+// Fill up with your own api key.

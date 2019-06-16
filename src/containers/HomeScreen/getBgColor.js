@@ -1,5 +1,8 @@
+import data from '../../../config/data'
+
 export const getHomeBgColor = () => {
-    hour = new Date().getHours();
+    hour = data.getHours()
+    console.log(hour)
     if(hour>=0&&hour<5) // 밤 [0, 5)
         return ['#0D1F53', '#141F3E']
     if(hour>=5&&hour<6) // 새벽 [5, 6)
@@ -17,7 +20,7 @@ export const getHomeBgColor = () => {
 }
 
 export const getCondBoxColor = () => {
-    hour = new Date().getHours();
+    hour = data.getHours()
     if(hour>=0&&hour<5) // 밤 [0, 5)
         return '#334475'
     if(hour>=5&&hour<6) // 새벽 [5, 6)

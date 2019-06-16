@@ -3,8 +3,9 @@ import {View, Image, Text, StyleSheet, TouchableOpacity, TouchableWithoutFeedbac
 
 export default class MiniWeather extends Component {
     render() {
+        const {bg} = this.props
         return (
-            <View style={styles.container}>
+            <View style={[styles.container, {backgroundColor : bg}]}>
 
             </View>
         )
@@ -16,6 +17,5 @@ const styles = StyleSheet.create({
         width : "45%",
         height : "100%",
         borderRadius: 15,
-        backgroundColor : 'rgba(10, 10, 10, 0.5)',
     }
 })
