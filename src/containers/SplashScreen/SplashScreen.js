@@ -12,12 +12,12 @@ import {
     ToastAndroid,
     BackHandler,
     TouchableWithoutFeedback,
+    ActivityIndicator
 } from 'react-native'
 
 import Geolocation from 'react-native-geolocation-service'
 import {connect} from 'react-redux'
 import AsyncStorage from '@react-native-community/async-storage'
-import Button from 'apsl-react-native-button'
 
 import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setWeekWeather, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
 import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
@@ -86,14 +86,19 @@ class SplashScreen extends Component {
             else if(!this.state.waited) {
                 ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시만 기다려주세요.', ToastAndroid.SHORT)
                 //BackHandler.exitApp()
-                this.readyFor2500ms()
-                .then(this.setState({waited: true}))
+                this.lastChance()
             }
             else {
                 ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시 후 다시 시도해주세요.', ToastAndroid.SHORT)
                 BackHandler.exitApp()
             }
         }   
+    }
+
+    lastChance = async () => {
+        done = await this.readyFor2500ms()
+                if (done !== null)
+                    this.setState({waited : true})
     }
 
     animateToChoiceLayout = () => {
@@ -438,6 +443,11 @@ class SplashScreen extends Component {
                     </Animated.View>
                     )}
                 </Animated.View>
+                {(this.state.AnimateDone && !this.state.isLoaded) && 
+                    <View style={styles.overlayContainer}>
+                        <ActivityIndicator size="large" color="#0000ff"/>
+                    </View>
+                }
             </Animated.View>
         );
     }
@@ -499,6 +509,15 @@ const styles = StyleSheet.create({
     buttonText : {
         fontSize : 15,
         fontFamily : "Bongodik"
+    },
+    overlayContainer : {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        backgroundColor: '#fff',
+        opacity: 0.6,
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 });
 
