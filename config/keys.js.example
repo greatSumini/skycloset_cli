@@ -4,4 +4,6 @@ export const sgisKey_ID = '********'
 export const sgisKey_SECRET = '********' 
 export const airkoreaKey = '********' 
 
+export const dev_passwd = '********'
+export const unitId = '********'
 // Fill up with your own api key.

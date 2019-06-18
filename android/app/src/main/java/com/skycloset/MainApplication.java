@@ -3,6 +3,10 @@ package com.skycloset;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+//import io.invertase.firebase.RNFirebasePackage;
+//import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
+//import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+//import com.google.android.gms.ads.MobileAds;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -29,6 +33,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
         new MainReactPackage(),
+            //new RNFirebasePackage(),
+            //new RNFirebaseAdMobPackage(),
+            //new RNFirebaseAnalyticsPackage(),
             new LottiePackage(),
             new AsyncStoragePackage(),
         new RNGestureHandlerPackage(),
@@ -51,6 +58,7 @@ public class MainApplication extends Application implements ReactApplication {
   @Override
   public void onCreate() {
     super.onCreate();
+    //MobileAds.initialize(this, "ca-app-pub-8116042692354073~6395712418");
     SoLoader.init(this, /* native exopackage */ false);
   }
 }

@@ -1,12 +1,19 @@
 import React, {Component} from 'react'
-import {Text} from 'react-native'
+import {Text, Button, View} from 'react-native'
 
 export default class DrawerPanel extends Component {
     render() {
+        const {onDonatePress} = this.props
         return (
-            <Text>
-                I'm Drawer Panel
-            </Text>
+            <View>
+                <Text>
+                    I'm Drawer Panel
+                </Text>
+                <Button
+                    title='후원하기'
+                    //onPress={onDonatePress}
+                />
+            </View>
         );
     }
 }

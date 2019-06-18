@@ -10,7 +10,8 @@ import {
     Platform, 
     Dimensions,
     ToastAndroid,
-    BackHandler
+    BackHandler,
+    TouchableWithoutFeedback,
 } from 'react-native'
 
 import Geolocation from 'react-native-geolocation-service'
@@ -25,6 +26,7 @@ import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolic
 class SplashScreen extends Component {
     state = {
         isLoaded : false,
+        waited : false,
         AnimateDone : false,
         UserInfoPrepared : false,
         choiceStart : false,
@@ -81,6 +83,12 @@ class SplashScreen extends Component {
                 }
                 this.props.navigation.navigate('App')
             }
+            else if(!this.state.waited) {
+                ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시만 기다려주세요.', ToastAndroid.SHORT)
+                //BackHandler.exitApp()
+                this.readyFor2500ms()
+                .then(this.setState({waited: true}))
+            }
             else {
                 ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시 후 다시 시도해주세요.', ToastAndroid.SHORT)
                 BackHandler.exitApp()
@@ -96,11 +104,27 @@ class SplashScreen extends Component {
     onMalePress = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         this.setState({selecteGender : 'm'})
+        
+        // 임시 2019_06_18
+        AsyncStorage.setItem('gender', 'm')
+        AsyncStorage.setItem('bias', '0')
+        this.props.onSetCurrentGender('f')
+        this.props.onSetCurrentBias(0)
+        this.setState({UserInfoPrepared : true})
+        console.log(this.state)
     }
 
     onFemalePress = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
         this.setState({selecteGender : 'f'})
+        
+        // 임시 2019_06_18
+        AsyncStorage.setItem('gender', 'f')
+        AsyncStorage.setItem('bias', '0')
+        this.props.onSetCurrentGender('f')
+        this.props.onSetCurrentBias(0)
+        this.setState({UserInfoPrepared : true})
+        console.log(this.state)
     }
 
     onSubmitPress = () => {
@@ -379,14 +403,26 @@ class SplashScreen extends Component {
                         <Text style={styles.choiceText}>
                             당신의 성별을 선택해주세요.
                         </Text>
-                        <Button style={[styles.button, maleButton]} textStyle={[styles.buttonText, maleButtonText]} onPress={this.onMalePress}>
-                            남자
-                        </Button>
-                        <View style={{height:"4%"}}></View>
-                        <Button style={[styles.button, femaleButton]} textStyle={[styles.buttonText, femaleButtonText]} onPress={this.onFemalePress}>
-                            여자
-                        </Button>
-                        <View style={{height:"4%"}}></View>
+                        <View style={styles.buttonContainer}>
+                            <TouchableWithoutFeedback onPress={this.onFemalePress}>
+                                <View style={[styles.button, femaleButton]}>
+                                    <Text
+                                        style={[styles.buttonText, femaleButtonText]}>
+                                        여자
+                                    </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                            <View style={{width:"10%"}}/>
+                            <TouchableWithoutFeedback onPress={this.onMalePress}>
+                                <View style={[styles.button, maleButton]}>
+                                    <Text
+                                        style={[styles.buttonText, maleButtonText]}>
+                                        남자
+                                    </Text>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                        <View style={{height:"4%"}}></View>{/*
                         {(!this.state.selecteGender) && (
                             <View style={{height:"10%"}}></View>
                         )}
@@ -398,7 +434,7 @@ class SplashScreen extends Component {
                                 onPress={this.onSubmitPress}>
                                 시작하기!
                             </Button>
-                        )}
+                        )}*/}
                     </Animated.View>
                     )}
                 </Animated.View>
@@ -446,13 +482,19 @@ const styles = StyleSheet.create({
     },
     choiceText : {
         fontSize : 18,
-        marginBottom : "8%",
+        marginBottom : "12%",
+    },
+    buttonContainer : {
+        flexDirection : 'row',
     },
     button : {
-        width : "80%",
-        height : "15.5%",
-        borderRadius : 0,
+        width : Dimensions.get('window').width * 0.4,
+        height : Dimensions.get('window').width * 0.4,
+        borderRadius : Dimensions.get('window').width * 0.2,
         borderColor : '#707070',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth : 1,
     },
     buttonText : {
         fontSize : 15,

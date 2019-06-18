@@ -13,7 +13,7 @@ export const getHomeBgColor = () => {
         return ['#83D7F7', '#4DADFF']
     if(hour>=13&&hour<18) // 저녁 [13, 18)
         return ['#77B3FA', '#0F77ED']
-    if(hour>=18&&hour<20) // 밤 [18, 20)
+    if(hour>=18&&hour<20) // 늦저녁 [18, 20)
         return ['#4B74AA', '#B38C98', '#DD836F']
     if(hour>=20&&hour<24) // 밤 [20, 24)
         return ['#243B73', '#2B4590']
@@ -31,7 +31,7 @@ export const getCondBoxColor = () => {
         return '#55ABD2'
     if(hour>=13&&hour<18) // 저녁 [13, 18)
         return '#4385D2'
-    if(hour>=18&&hour<20) // 밤 [18, 20)
+    if(hour>=18&&hour<20) // 늦저녁 [18, 20)
         return '#41547E'
     if(hour>=20&&hour<24) // 밤 [20, 24)
         return '#00165A'

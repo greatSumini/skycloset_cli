@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
-import {Dimensions, Share, StyleSheet, ScrollView, Text, View, Platform} from 'react-native';
+import {Share, StyleSheet, ScrollView, Text, View, Platform, TouchableWithoutFeedback, ToastAndroid} from 'react-native';
 import {connect} from 'react-redux';
 
 import Drawer from 'react-native-drawer'
 import LinearGradient from 'react-native-linear-gradient'
-import LottieView from 'lottie-react-native'
+import DialogInput from 'react-native-dialog-input'
 
 import DrawerPanel from '../DrawerPanel/DrawerPanel'
 import HomeHead from './HomeHead'
@@ -12,12 +12,18 @@ import WeatherInfo from './WeatherInfo'
 import Closet from '../../components/Closet'
 import MiniWeather from './MiniWeather'
 import WeeklyWeather from './WeeklyWeather'
+import data from '../../../config/data'
+import {dev_passwd} from '../../../config/keys'
 
 import {getHomeBgColor} from './getBgColor'
 import {getPmCondition, getPmImoticon} from './getDustInfo'
 import {getWeatherCondition, getWeatherImoticon} from './getWeatherInfo'
 
 class HomeScreen extends Component {
+    state = {
+        isDialogVisible : false
+    }
+
     static navigationOptions = {
         header: null,
     }
@@ -53,6 +59,28 @@ class HomeScreen extends Component {
     openGeoScreen = () => {
         this.props.navigation.push('Geo')
     }
+/*
+    openDonateScreen = () => {
+        this.props.navigation.push('Donate')
+    }*/
+
+    onPowerLongPress = () => {
+        this.setState({isDialogVisible:true})
+    }
+
+    onDevPasswdSubmit = (passwd) => {
+        this.setState({isDialogVisible:false})
+        if(passwd != dev_passwd) {
+            return
+        }
+        if(data.state.dev) {
+            ToastAndroid.show('DEV MODE OFF', ToastAndroid.SHORT)
+        }
+        else {
+            ToastAndroid.show('DEV MODE ON', ToastAndroid.SHORT)
+        }
+        data.setDevMode(!data.state.dev)
+    }
 
     render() {
         const {address, currentWeather, weather1, weather0, dust, weekWeather} = this.props;
@@ -60,7 +88,10 @@ class HomeScreen extends Component {
         return (
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
-                    content={<DrawerPanel />}
+                    content={
+                    <DrawerPanel 
+                        //onDonatePress={this.openDonateScreen}
+                    />}
                     openDrawerOffset={0.7}
                     tapToClose={true}
                     tweenDuration={150}
@@ -106,9 +137,19 @@ class HomeScreen extends Component {
                                         <WeeklyWeather weekInfo={weekWeather} bg={compBg}/>
                                     </View>
                                 </View>
-                                <Text style={{color:'white', fontSize:13}}>
-                                    Powerd by <Text style={{fontWeight:"bold"}}>Dark Sky, Air Korea</Text>
-                                </Text>
+                                <TouchableWithoutFeedback
+                                    onLongPress={this.onPowerLongPress}>
+                                    <Text style={{color:'white', fontSize:13}}>
+                                        Powerd by <Text style={{fontWeight:"bold"}}>Dark Sky, Air Korea</Text>
+                                    </Text>
+                                </TouchableWithoutFeedback>
+                                <DialogInput
+                                    isDialogVisible={this.state.isDialogVisible}
+                                    title={"dev?"}
+                                    message={"input passwd"}
+                                    submitInput={(inputText) => this.onDevPasswdSubmit(inputText)}
+                                    closeDialog={()=> {this.setState({isDialogVisible:false})}}>
+                                </DialogInput>
                             </View>
                         </LinearGradient>
                     </ScrollView>
