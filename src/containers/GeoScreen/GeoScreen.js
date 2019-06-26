@@ -6,6 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
+    ToastAndroid
 } from 'react-native';
 
 import {connect} from 'react-redux'
@@ -18,11 +19,10 @@ class GeoScreen extends Component {
     }
 
     onCloseButtonPressed = () => {
-        this.props.navigation.pop()
+        this.props.navigation.goBack()
     }
 
     onSearchButtonPressed = () => {
-
     }
 
     onCurrentLocButtonPressed = () => {
@@ -30,9 +30,13 @@ class GeoScreen extends Component {
     }
 
     render() {
+        const bgColor = {
+            backgroundColor : getGeoBgColor(),
+        }
+
         return (
             <View style={styles.container}>
-                <View style={styles.headContainer}>
+                <View style={[styles.headContainer, bgColor]}>
                     <View style={{flexDirection:'row'}}>
                         <TouchableOpacity 
                             onPress={this.onCloseButtonPressed}
@@ -90,7 +94,6 @@ const styles = StyleSheet.create({
         paddingLeft : "5%",
         paddingRight : "5%",
         paddingTop : "6%",
-        backgroundColor : getGeoBgColor(),
     },
     guideText : {
         fontSize : 23,

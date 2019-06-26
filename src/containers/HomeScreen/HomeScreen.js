@@ -102,6 +102,12 @@ class HomeScreen extends Component {
     }*/
 
     onPowerLongPress = () => {
+        if(data.state.dev) {
+            data.randDevHours()
+            ToastAndroid.show('HOUR : ' + data.state.dev_hours, ToastAndroid.SHORT)
+            this.setState({phase_3:true})
+            return
+        }
         this.setState({isDialogVisible:true})
     }
 
@@ -110,12 +116,9 @@ class HomeScreen extends Component {
         if(passwd != dev_passwd) {
             return
         }
-        if(data.state.dev) {
-            ToastAndroid.show('DEV MODE OFF', ToastAndroid.SHORT)
-        }
-        else {
-            ToastAndroid.show('DEV MODE ON', ToastAndroid.SHORT)
-        }
+        ToastAndroid.show('DEV MODE ON', ToastAndroid.SHORT)
+        
+        data.randDevHours()
         data.setDevMode(!data.state.dev)
     }
 
