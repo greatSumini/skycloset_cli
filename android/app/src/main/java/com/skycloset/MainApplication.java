@@ -7,7 +7,7 @@ import com.facebook.react.ReactApplication;
 //import io.invertase.firebase.admob.RNFirebaseAdMobPackage;
 //import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
 //import com.google.android.gms.ads.MobileAds;
-import com.airbnb.android.react.lottie.LottiePackage;
+
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.ReactNativeHost;
@@ -36,7 +36,6 @@ public class MainApplication extends Application implements ReactApplication {
             //new RNFirebasePackage(),
             //new RNFirebaseAdMobPackage(),
             //new RNFirebaseAnalyticsPackage(),
-            new LottiePackage(),
             new AsyncStoragePackage(),
         new RNGestureHandlerPackage(),
         new RNFusedLocationPackage(),

@@ -32,6 +32,16 @@ const pmImoticon = [
     '😡',
     '👿',
 ]
+const pmColor = [
+    '#4168B1',
+    '#4295B8',
+    '#17B5D0',
+    '#34B473',
+    '#F7BA4C',
+    '#ED7352',
+    '#E71210',
+    '#A72B28',
+]
 
 export const getPmIcon = (value, type) => {
     let i = 0
@@ -58,4 +68,13 @@ export const getPmImoticon = (value, type) => {
             break
     }
     return pmImoticon[i]
+}
+
+export const getPmColor = (value, type) => {
+    let i = 0
+    for(;i<7;++i) {
+        if(value <= pmStand[type][i])
+            break
+    }
+    return pmColor[i]
 }

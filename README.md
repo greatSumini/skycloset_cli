@@ -65,6 +65,13 @@ Skycloset is a small project for Demoday of CEOS, so it has limited manpower and
 4. [SGIS Open API](https://sgis.kostat.go.kr/developer/html/home.html)
 
 
+### CITATIONS
+1. [논문 : 기후변화와 관광수요 관계에 관한 연구: 기후쾌적성을 중심으로](http://kiss.kstudy.com/thesis/thesis-view.asp?key=3506533)
+2. [논문 : 의복의 쾌적성 평가를 위한 상반신에서의 의복기후분포](http://kiss.kstudy.com/thesis/thesis-view.asp?key=3337257)
+3. [논문 : 사무실에서 작업시 의복의 쾌적성 평가를 위한 의복기후의 계절변화 측정](http://kiss.kstudy.com/thesis/thesis-view.asp?key=1926054)
+4. [blog : 습도를 반영한 온도지표 만들기](https://m.blog.naver.com/newils2002/220945893689)
+
+
 ### License
 
 

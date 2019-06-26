@@ -1,18 +1,18 @@
 import React, {Component} from 'react'
 import {
-    StyleSheet, 
+    StyleSheet,
     Text,
     View,
-    Animated, 
-    PermissionsAndroid, 
-    LayoutAnimation, 
-    UIManager, 
-    Platform, 
+    Animated,
+    PermissionsAndroid,
+    LayoutAnimation,
+    UIManager,
+    Platform,
     Dimensions,
     ToastAndroid,
     BackHandler,
     TouchableWithoutFeedback,
-    ActivityIndicator
+    ActivityIndicator,
 } from 'react-native'
 
 import Geolocation from 'react-native-geolocation-service'
@@ -20,8 +20,8 @@ import {connect} from 'react-redux'
 import AsyncStorage from '@react-native-community/async-storage'
 
 import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setWeekWeather, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
-import {googleMapsKey, darkSkyKey, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
+import {googleMapsKey, darkSkyKey, darkSkyKey2, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
+import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
 
 class SplashScreen extends Component {
     state = {
@@ -34,7 +34,7 @@ class SplashScreen extends Component {
     }
 
     constructor(){
-        super();
+        super()
         if(Platform.OS === 'android')
         {
             UIManager.setLayoutAnimationEnabledExperimental(true)
@@ -50,8 +50,9 @@ class SplashScreen extends Component {
             this.getLocation()
         }
         const done = await this.readyFor2500ms()
-        if(!this.state.UserInfoPrepared)
+        if(!this.state.UserInfoPrepared) {
             this.animateToChoiceLayout()
+        }
         if(done!==null) {
             this.setState({AnimateDone : true})
             console.log(this.state)
@@ -72,7 +73,7 @@ class SplashScreen extends Component {
                 () => {resolve('result')},
                 2500
             )    
-        );
+        )
     }
 
     componentDidUpdate() {
@@ -83,14 +84,16 @@ class SplashScreen extends Component {
                 }
                 this.props.navigation.navigate('App')
             }
-            else if(!this.state.waited) {
-                ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시만 기다려주세요.', ToastAndroid.SHORT)
-                //BackHandler.exitApp()
-                this.lastChance()
-            }
             else {
-                ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시 후 다시 시도해주세요.', ToastAndroid.SHORT)
-                BackHandler.exitApp()
+                if(!this.state.waited) {
+                    ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시만 기다려주세요.', ToastAndroid.SHORT)
+                    //BackHandler.exitApp()
+                    this.lastChance()
+                }
+                else {
+                    ToastAndroid.show('네트워크 접속이 원활하지 않습니다.\n잠시 후 다시 시도해주세요.', ToastAndroid.SHORT)
+                    BackHandler.exitApp()
+                }
             }
         }   
     }
@@ -189,6 +192,8 @@ class SplashScreen extends Component {
                     currentTempApparent : json.currently.apparentTemperature,
                     currentHum : json.currently.humidity,
                     currentWs : json.currently.windSpeed,
+                    currentWb : json.currently.windBearing,
+                    currentUv : json.currently.uvIndex,
                     currentCc : json.currently.cloudCover,
                     currentIcon : json.currently.icon,
                 });
@@ -232,7 +237,7 @@ class SplashScreen extends Component {
                 }
                 this.props.onSetWeekWeather(weekWeather)
             })
-            .then(this.fetch_retry(`https://api.darksky.net/forecast/${darkSkyKey}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`, 10)
+            .then(this.fetch_retry(`https://api.darksky.net/forecast/${darkSkyKey2}/${latitude},${longitude},${yesterTime}?exclude=currently,minutely,hourly,alerts,flags&units=si&lang=ko`, 10)
                 .then(response2 => response2.json()) // 응답값을 json으로 변환
                 .then(json2 => {
                     this.props.onSetWeather0({
@@ -417,7 +422,7 @@ class SplashScreen extends Component {
                                     </Text>
                                 </View>
                             </TouchableWithoutFeedback>
-                            <View style={{width:"10%"}}/>
+                            <View style={{width:"7%"}}/>
                             <TouchableWithoutFeedback onPress={this.onMalePress}>
                                 <View style={[styles.button, maleButton]}>
                                     <Text
@@ -449,7 +454,7 @@ class SplashScreen extends Component {
                     </View>
                 }
             </Animated.View>
-        );
+        )
     }
 }
 
@@ -498,9 +503,9 @@ const styles = StyleSheet.create({
         flexDirection : 'row',
     },
     button : {
-        width : Dimensions.get('window').width * 0.4,
-        height : Dimensions.get('window').width * 0.4,
-        borderRadius : Dimensions.get('window').width * 0.2,
+        width : Dimensions.get('window').width * 0.35,
+        height : Dimensions.get('window').width * 0.35,
+        borderRadius : Dimensions.get('window').width * 0.175,
         borderColor : '#707070',
         alignItems: 'center',
         justifyContent: 'center',
@@ -519,7 +524,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     }
-});
+})
 
 const mapStateToProps = state => {
     return {
@@ -537,8 +542,8 @@ const mapStateToProps = state => {
         currentWeather : state.current.currentWeather,
         dust : state.dust.dust,
         dist : state.dust.dist,
-    };
-};
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -557,8 +562,8 @@ const mapDispatchToProps = dispatch => {
         onSetCurrentWeather : (currentWeather) => dispatch(setCurrentWeather(currentWeather)),
         onSetDust : (dust) => dispatch(setDust(dust)),
         onSetDist : (dist) => dispatch(setDist(dist)),
-    };
-};
+    }
+}
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen)

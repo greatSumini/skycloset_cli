@@ -1,7 +1,7 @@
-import { createSwitchNavigator, createStackNavigator, createAppContainer } from "react-navigation";
+import { createSwitchNavigator, createStackNavigator, createAppContainer } from "react-navigation"
 
-import HomeScreen from './src/containers/HomeScreen/HomeScreen';
-import SplashScreen from './src/containers/SplashScreen/SplashScreen';
+import HomeScreen from './src/containers/HomeScreen/HomeScreen'
+import SplashScreen from './src/containers/SplashScreen/SplashScreen'
 import GeoScreen from './src/containers/GeoScreen/GeoScreen'
 //import DonateScreen from './src/containers/DonateScreen/DonateScreen'
 

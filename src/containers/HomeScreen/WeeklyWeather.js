@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         width : "92%",
         height : "100%",
         borderRadius: 15,
-        paddingTop : "4.5%",
+        paddingTop : "3.5%",
     },
     row : {
         width : "100%",
@@ -87,9 +87,7 @@ const styles = StyleSheet.create({
     },
     dayInfo : {
         height : "100%",
-        marginLeft : "3%",
-        marginRight : "3%",
-        width:"8%",
+        width:"13.5%",
         alignItems : "center",
     },
     dayBar : {
@@ -102,21 +100,23 @@ const styles = StyleSheet.create({
     text : {
         fontSize : 15,
         color : "white",
-        margin : "20%",
+        //margin : "20%",
+        marginTop : "15%",
+        marginBottom:"15%",
     },
     icon : {
         marginTop : "18%",
         height: "9.5%",
-        width : "100%",
+        width : "60%",
     },
     circle : {
-        width : "35%",
-        height : "7.5%",
+        width : "22%",
+        height : "7%",
         borderRadius : 100,
         backgroundColor : 'white',
     },
     bar : {
-        width : "8%",
+        width : "6%",
         paddingTop : "-9%",
         paddingBottom : "-9%",
         backgroundColor : 'white',
