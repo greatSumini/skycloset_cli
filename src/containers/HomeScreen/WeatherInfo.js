@@ -13,23 +13,25 @@ export default class WeatherInfo extends Component {
         const {tempDiff, icon, pm10, pm25, onPress} = this.props;
 
         return (
-            <TouchableWithoutFeedback
-                onPress={onPress}>
-                <View style={styles.container}>
-                    <View style={[styles.conditionContainer, {backgroundColor:getCondBoxColor()}]}>
-                        <WeatherCondition
-                            style={styles.wetherCondition}
-                            tempDiff={tempDiff}
-                            icon={icon}
-                        />
-                        <DustCondition 
-                            style={styles.dustCondition}
-                            pm10={pm10}
-                            pm25={pm25}
-                        />
+            <View style={{width:"100%", marginBottom:"4%"}}>
+                <TouchableWithoutFeedback
+                    onPress={onPress}>
+                    <View style={styles.container}>
+                        <View style={[styles.conditionContainer, {backgroundColor:getCondBoxColor()}]}>
+                            <WeatherCondition
+                                style={styles.wetherCondition}
+                                tempDiff={tempDiff}
+                                icon={icon}
+                            />
+                            <DustCondition 
+                                style={styles.dustCondition}
+                                pm10={pm10}
+                                pm25={pm25}
+                            />
+                        </View>
                     </View>
-                </View>
-            </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
+            </View>
         );
     }
 }
@@ -38,7 +40,7 @@ const styles = StyleSheet.create({
     container : {
         alignItems: 'center',
         justifyContent : 'center',
-        marginTop : "6%",
+        marginTop:"2.5%",
     },
     conditionContainer : {
         flexDirection : 'row',

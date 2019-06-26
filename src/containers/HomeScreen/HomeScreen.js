@@ -137,7 +137,7 @@ class HomeScreen extends Component {
                     springDamping : 1.5
                 },
                 update : {
-                    property: LayoutAnimation.Properties.opacity,
+                    property: LayoutAnimation.Properties.scaleY,
                     type: LayoutAnimation.Types.spring,
                     springDamping : 0.4
                 },
@@ -199,14 +199,10 @@ class HomeScreen extends Component {
         const {address, currentWeather, weather1, weather0, dust, weekWeather} = this.props;
         const compBg = 'rgba(10, 10, 10, 0.3)'
 
-        const detailAbsolute = (this.state.phase_0 != true) ? {
-            marginTop : "5%",
-            marginBottom : '-40%',
-        } : null
-
         const wrapper_phase1 = (this.state.phase_0 != true) ? {
             paddingTop : 0,
             height : Dimensions.get('window').height,
+            paddingBottom : "-15%",
         } : null
 
         const innerWrapper = (this.state.phase_0 != true) ? {
@@ -226,7 +222,7 @@ class HomeScreen extends Component {
                     >
                     <ScrollView style={styles.container}>
                         <View style={wrapper_phase1}>
-                            <LinearGradient colors={getHomeBgColor(false)} style={styles.linearGradient}>
+                            <LinearGradient colors={getHomeBgColor(false)} /*style={{height: (this.state.phase_0 ? "100%" : "23%")}}*/>
                                 <View style={[styles.wrapper, wrapper_phase1]}>
                                     <View style={[styles.wrapperInner, innerWrapper]}>
                                         {(this.state.phase_0)&&(
@@ -253,12 +249,10 @@ class HomeScreen extends Component {
                                         )}
                                     </View>
                                     {(this.state.phase_0!=true)&&(
-                                        <View style={{height:"150%", width:"100%", backgroundColor:'#FFFFFF', marginTop:"25%",marginBottom:"-275%"}}>
-                                            
-                                        </View>
+                                    <View style={{marginTop: "20%", height:"50%", width:"100%", backgroundColor:'white', marginBottom:"-114%"}}>
+                                    </View>
                                     )}
                                     <WeatherInfo 
-                                        style={detailAbsolute}
                                         icon={currentWeather.currentIcon}
                                         tempDiff={(weather1.tempMax - weather0.tempMax)}
                                         pm10 = {dust.pm10Value}
@@ -266,7 +260,7 @@ class HomeScreen extends Component {
                                         onPress = {this.onDetailPress}
                                     />
                                     {(this.state.phase_0!=true)&&(
-                                        <View style={{height:"100%", width:"100%", backgroundColor:'white', marginTop:"0%", alignItems:'center'}}>
+                                        <View style={styles.detailContinaer}>
                                             <View style={{width:"100%",flexDirection:"row", height:"13%", marginTop:"0%",borderBottomColor:'#D4D5D5', borderBottomWidth:4, marginBottom:"5%"}}>
                                                 <View style={{height:"85%", flex:1, alignItems:'center', justifyContent:'center'}}>
                                                     <Text style={styles.detailCompTitle}>
@@ -420,6 +414,13 @@ const styles = StyleSheet.create({
          fontSize : 17,
          color : 'white',
          fontFamily : "Bongodik-Regular",
+    },
+    detailContinaer : {
+        height:"100%", 
+        width:"100%", 
+        backgroundColor:'white', 
+        marginTop:"0%", 
+        alignItems:'center'
     },
     detailCompTitle : {
         fontFamily : "Bongodik-Regular",
