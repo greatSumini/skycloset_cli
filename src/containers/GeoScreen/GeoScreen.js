@@ -6,7 +6,6 @@ import {
     StyleSheet,
     TouchableOpacity,
     TextInput,
-    ToastAndroid
 } from 'react-native';
 
 import {connect} from 'react-redux'
@@ -53,9 +52,9 @@ class GeoScreen extends Component {
                     </Text>
                     <View style={{flexDirection:'row', marginTop : "6%", alignItems : 'center', justifyContent : 'center'}}>
                         <TextInput
-                            style={{height : "85%", width : "80%", backgroundColor : 'white', borderRadius : 500, marginRight : "5%", paddingLeft : "5%", fontSize : 15}}
-                        >
-                            {this.props.address}
+                            style={{height : "80%", width : "80%", backgroundColor : 'white', borderRadius : 500, marginRight : "5%", paddingLeft : "5%", fontSize : 15}}
+                            placeholder="예) 하늘동 12-3 또는 하늘대로"
+                            placeholderTextColor="grey">
                         </TextInput>
                         <TouchableOpacity 
                             onPress={this.onSearchButtonPressed}
