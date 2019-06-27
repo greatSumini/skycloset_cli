@@ -19,7 +19,7 @@ import Geolocation from 'react-native-geolocation-service'
 import {connect} from 'react-redux'
 import AsyncStorage from '@react-native-community/async-storage'
 
-import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setWeekWeather, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist} from '../../store/actions/index'
+import {setLatitude, setLongitude, setAddress, setWeather0, setWeather1, setWeather2, setWeather3, setWeekWeather, setCurrentWeather, setCurrentBias, setCurrentGender, setTmX, setTmY, setDust, setDist, setHourlyWeather} from '../../store/actions/index'
 import {googleMapsKey, darkSkyKey, darkSkyKey2, sgisKey_ID, sgisKey_SECRET, airkoreaKey} from '../../../config/keys'
 import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace'
 
@@ -227,6 +227,17 @@ class SplashScreen extends Component {
                     icon : json.daily.data[2].icon,
                     cloudCover : json.daily.data[2].cloudCover,
                 });
+                let hourlyWeather = []
+                for(let i = 0;i<26;++i) {
+                    hourlyWeather.push({
+                        temp: json.hourly.data[i].temperature,
+                        hum : json.hourly.data[i].humidity,
+                        ws : json.hourly.data[i].windSpeed,
+                        cc : json.hourly.data[i].cloudCover,
+                        icon : json.hourly.data[i].icon,
+                    })
+                }
+                this.props.onSetHourlyWeather(hourlyWeather);
                 let weekWeather = []
                 for(let i = 0;i<8;++i) {
                     weekWeather.push({
@@ -263,10 +274,32 @@ class SplashScreen extends Component {
                         .then(response5 => response5.json())
                         .then(json5 => {
                             this.props.onSetDist(json5.list[0].tm);
+                            console.log(json5)
                             this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[0].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`, 10)
                             .then(response6 => response6.json())
                             .then(json6 => {
                                 this.props.onSetDust(json6.list[0]);
+                                if(json6.list[0].pm25Value === '-') {
+                                    this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[1].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`, 10)
+                                    .then(response7 => response7.json())
+                                    .then(json7 => {
+                                        if(json7.list[0].pm25Value === '-') {
+                                            this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[1].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`, 10)
+                                            .then(response8 => response8.json())
+                                            .then(json8 => {
+                                                if(json8.list[0].pm25Value === '-') {
+                                                    this.props.onSetDust({...json6.list[0], pm25Value : 25});
+                                                }
+                                                else {
+                                                    this.props.onSetDust({...json6.list[0], pm25Value : json8.list[0].pm25Value});
+                                                }
+                                            })
+                                        }
+                                        else {
+                                            this.props.onSetDust({...json6.list[0], pm25Value : json7.list[0].pm25Value});
+                                        }
+                                    })
+                                }
                                 this.setState({isLoaded : true})
                             })
                         })
@@ -557,6 +590,7 @@ const mapDispatchToProps = dispatch => {
         onSetWeather2 : (weather2) => dispatch(setWeather2(weather2)),
         onSetWeather3 : (weather3) => dispatch(setWeather3(weather3)),
         onSetWeekWeather : (weekWeather) => dispatch(setWeekWeather(weekWeather)),
+        onSetHourlyWeather : (hourlyWeather) => dispatch(setHourlyWeather(hourlyWeather)),
         onSetCurrentBias : (currentBias) => dispatch(setCurrentBias(currentBias)),
         onSetCurrentGender : (currentGender) => dispatch(setCurrentGender(currentGender)),
         onSetCurrentWeather : (currentWeather) => dispatch(setCurrentWeather(currentWeather)),

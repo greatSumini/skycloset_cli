@@ -11,7 +11,6 @@ import {
     LayoutAnimation,
     Dimensions,
     UIManager,
-    BackHandler,
 } from 'react-native'
 import {connect} from 'react-redux'
 
@@ -26,6 +25,7 @@ import Closet from '../../components/Closet'
 import MiniWeather from './MiniWeather'
 import WeeklyWeather from './WeeklyWeather'
 import DetailHead from './DetailHead'
+import TempChart from './TempChart'
 
 import data from '../../../config/data'
 import {dev_passwd} from '../../../config/keys'
@@ -73,7 +73,7 @@ class HomeScreen extends Component {
         tempDiff = this.props.weather1.tempMax - this.props.weather0.tempMax
         const result = await Share.share({
             message:
-            `☀하늘옷장☁ - Share Test Message
+            `☀하늘옷장☁
 지금 ${this.props.address}의 날씨는 ${getWeatherImoticon(this.props.currentWeather.currentIcon)}${getWeatherCondition(this.props.currentWeather.currentIcon)}!!
 🌡현재온도 : ${this.props.currentWeather.currentTemp.toFixed(1)}
 🌡어제보다 ${Math.abs(tempDiff).toFixed(1)}℃ ${tempDiff>0 ? '↑' : '↓'}
@@ -196,7 +196,7 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const {address, currentWeather, weather1, weather0, dust, weekWeather} = this.props;
+        const {address, currentWeather, weather1, weather0, dust, weekWeather, hourlyWeather} = this.props;
         const compBg = 'rgba(10, 10, 10, 0.3)'
 
         const wrapper_phase1 = (this.state.phase_0 != true) ? {
@@ -249,7 +249,7 @@ class HomeScreen extends Component {
                                         )}
                                     </View>
                                     {(this.state.phase_0!=true)&&(
-                                    <View style={{marginTop: "20%", height:"50%", width:"100%", backgroundColor:'white', marginBottom:"-114%"}}>
+                                    <View style={{marginTop: "20%", height:"50%", width:"100%", backgroundColor:'white', marginBottom:"-118%"}}>
                                     </View>
                                     )}
                                     <WeatherInfo 
@@ -261,13 +261,13 @@ class HomeScreen extends Component {
                                     />
                                     {(this.state.phase_0!=true)&&(
                                         <View style={styles.detailContinaer}>
-                                            <View style={{width:"100%",flexDirection:"row", height:"13%", marginTop:"0%",borderBottomColor:'#D4D5D5', borderBottomWidth:4, marginBottom:"5%"}}>
+                                            <View style={{width:"100%",flexDirection:"row", height:"13%", marginTop:"10%",borderBottomColor:'#E2E2E2', borderBottomWidth:6, marginBottom:"0.7%"}}>
                                                 <View style={{height:"85%", flex:1, alignItems:'center', justifyContent:'center'}}>
                                                     <Text style={styles.detailCompTitle}>
                                                         습도
                                                     </Text>
                                                     <Text style={styles.detailCompText}>
-                                                        {(currentWeather.currentHum * 100)}%
+                                                        {(currentWeather.currentHum * 100).toFixed(0)}%
                                                     </Text>
                                                 </View>
                                                 <View style={{height:"85%", marginBottom:"0%", flex:1, alignItems:'center', justifyContent:'center', borderLeftWidth:1, borderRightWidth:1, borderColor:'#D4D5D5'}}>
@@ -287,30 +287,35 @@ class HomeScreen extends Component {
                                                     </Text>
                                                 </View>
                                             </View>
+                                            <View style={{height:"4%"}}></View>
                                             <View style={{flexDirection:'row', height : "6%", width:"88%", alignItems:'center', justifyContent:'center'}}>
                                                 <Text style={{height:"50%", width:"23%", fontSize:13, fontFamily:"Bongodik-Regular", color:'#707070'}}>
                                                     미세먼지
                                                 </Text>
-                                                <View style={{height:"50%", width:Math.min(dust.pm10Value / 150 * 77, 77) + "%", backgroundColor:getPmColor(dust.pm10Value,0), justifyContent:'center', paddingLeft:"0.5%"}}>
-                                                    <Text style={{color:'white'}}>
+                                                <View style={{height:"50%", width:Math.min(dust.pm10Value, 150) / 150 * 77 + "%", backgroundColor:getPmColor(dust.pm10Value,0), justifyContent:'center', paddingLeft:"0.5%"}}>
+                                                    <Text style={{color:'white', fontSize:13}}>
                                                         {dust.pm10Value}
                                                     </Text>
                                                 </View>
-                                                <View style={{height:"50%", width:Math.max((150 - dust.pm10Value) / 150 * 77, 0) + "%", backgroundColor:'#E5E6E6'}}>
+                                                <View style={{height:"50%", width:Math.max((150 - dust.pm10Value), 0) / 150 * 77 + "%", backgroundColor:'#EFEFEF'}}>
                                                 </View>
                                             </View>
                                             <View style={{flexDirection:'row', height : "6%", width:"88%", alignItems:'center', justifyContent:'center'}}>
                                                 <Text style={{height:"50%", width:"23%", fontSize:13, fontFamily:"Bongodik-Regular", color:'#707070'}}>
                                                     초미세먼지
                                                 </Text>
-                                                <View style={{height:"50%", width:Math.min(dust.pm25Value / 150 * 77, 77) + "%", backgroundColor:getPmColor(dust.pm25Value,1), justifyContent:'center', paddingLeft:"0.5%"}}>
-                                                    <Text style={{color:'white'}}>
+                                                <View style={{height:"50%", width:Math.min(dust.pm25Value, 150) / 150 * 77 + "%", backgroundColor:getPmColor(dust.pm25Value,1), justifyContent:'center', paddingLeft:"0.5%"}}>
+                                                    <Text style={{color:'white', fontSize:13}}>
                                                         {dust.pm25Value}
                                                     </Text>
                                                 </View>
-                                                <View style={{height:"50%", width:Math.max((150 - dust.pm25Value) / 150 * 77, 0) + "%", backgroundColor:'#E5E6E6'}}>
+                                                <View style={{height:"50%", width:Math.max((150 - dust.pm25Value), 0) / 150 * 77 + "%", backgroundColor:'#EFEFEF'}}>
                                                 </View>
                                             </View>
+                                            <TempChart
+                                                style={{height:"40%"}}
+                                                data = {hourlyWeather}
+                                            />
                                         </View>
                                     )}
                                     {(this.state.phase_0==true)&&(
@@ -442,6 +447,7 @@ const mapStateToProps = state => {
         weather2: state.weather.weather2,
         weather3: state.weather.weather3,
         weekWeather : state.weather.weekWeather,
+        hourlyWeather : state.weather.hourlyWeather,
         currentBias : state.current.currentBias,
         currentGender : state.current.currentGender,
         currentWeather : state.current.currentWeather,

@@ -1,4 +1,4 @@
-import {SET_WEATHER0, SET_WEATHER1, SET_WEATHER2, SET_WEATHER3, SET_WEEK_WEATHER} from '../actions/actionTypes'
+import {SET_WEATHER0, SET_WEATHER1, SET_WEATHER2, SET_WEATHER3, SET_WEEK_WEATHER, SET_HOURLY_WEATHER} from '../actions/actionTypes'
 
 const initialState = {
     weather0: {},
@@ -6,6 +6,7 @@ const initialState = {
     weather2: {},
     weather3: {},
     weekWeather: [],
+    hourlyWeather : [],
 }
 
 const reducer = (state = initialState, action) => {
@@ -34,6 +35,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 weekWeather: action.weekWeather,
+            };
+        case SET_HOURLY_WEATHER :
+            return {
+                ...state,
+                hourlyWeather: action.hourlyWeather,
             };
         default:
             return state;

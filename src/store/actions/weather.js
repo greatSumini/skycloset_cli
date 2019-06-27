@@ -1,4 +1,4 @@
-import {SET_WEATHER0, SET_WEATHER1, SET_WEATHER2, SET_WEATHER3, SET_WEEK_WEATHER} from './actionTypes';
+import {SET_WEATHER0, SET_WEATHER1, SET_WEATHER2, SET_WEATHER3, SET_WEEK_WEATHER, SET_HOURLY_WEATHER} from './actionTypes';
 
 export const setWeather0 = (weather) => {
     return {
@@ -32,5 +32,12 @@ export const setWeekWeather = (weekWeather) => {
     return {
         type : SET_WEEK_WEATHER,
         weekWeather : weekWeather
+    }
+}
+
+export const setHourlyWeather = (hourlyWeather) => {
+    return {
+        type : SET_HOURLY_WEATHER,
+        hourlyWeather : hourlyWeather,
     }
 }
