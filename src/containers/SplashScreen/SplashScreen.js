@@ -206,6 +206,7 @@ class SplashScreen extends Component {
                     windSpeed : json.daily.data[0].windSpeed,
                     icon : json.daily.data[0].icon,
                     cloudCover : json.daily.data[0].cloudCover,
+                    precip : json.daily.data[0].precipIntensityMax,
                 });
                 this.props.onSetWeather2({
                     tempMin : json.daily.data[1].temperatureMin,
@@ -273,7 +274,7 @@ class SplashScreen extends Component {
                         this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/MsrstnInfoInqireSvc/getNearbyMsrstnList?serviceKey=${airkoreaKey}&tmX=${json4.result.posX}&tmY=${json4.result.posY}&_returnType=json`, 10)
                         .then(response5 => response5.json())
                         .then(json5 => {
-                            this.props.onSetDist(json5.list[0].tm);
+                            this.props.onSetDist({name : json5.list[0].stationName, dist : json5.list[0].tm});
                             console.log(json5)
                             this.fetch_retry(`http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?stationName=${json5.list[0].stationName}&dataTerm=daily&ServiceKey=${airkoreaKey}&ver=1.0&_returnType=json`, 10)
                             .then(response6 => response6.json())

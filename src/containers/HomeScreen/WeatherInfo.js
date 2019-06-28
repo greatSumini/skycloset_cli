@@ -40,7 +40,9 @@ const styles = StyleSheet.create({
     container : {
         alignItems: 'center',
         justifyContent : 'center',
-        marginTop:"2.5%",
+        marginTop:"1.5%",
+        width:"94.3%",
+        marginLeft : "3%",
     },
     conditionContainer : {
         flexDirection : 'row',

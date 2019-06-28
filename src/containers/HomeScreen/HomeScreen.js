@@ -21,11 +21,10 @@ import DialogInput from 'react-native-dialog-input'
 import DrawerPanel from '../DrawerPanel/DrawerPanel'
 import HomeHead from './HomeHead'
 import WeatherInfo from './WeatherInfo'
-import Closet from '../../components/Closet'
 import MiniWeather from './MiniWeather'
 import WeeklyWeather from './WeeklyWeather'
 import DetailHead from './DetailHead'
-import TempChart from './TempChart'
+import TodayCloth from './TodayCloth'
 
 import data from '../../../config/data'
 import {dev_passwd} from '../../../config/keys'
@@ -33,6 +32,10 @@ import {dev_passwd} from '../../../config/keys'
 import {getHomeBgColor} from './getBgColor'
 import {getPmCondition, getPmImoticon, getPmColor} from './getDustInfo'
 import {getWeatherCondition, getWeatherImoticon} from './getWeatherInfo'
+import {getDiscomfort, getDiscomfortGrade} from './calculator'
+import {getComment} from '../../utils/getComment'
+
+import {setCurrentGender} from '../../store/actions/index'
 
 class HomeScreen extends Component {
     state = {
@@ -42,6 +45,7 @@ class HomeScreen extends Component {
         phase_2 : false,
         phase_3 : false,
         canAnimateDetail : true,
+        comment : '',
     }
 
     constructor(){
@@ -79,7 +83,7 @@ class HomeScreen extends Component {
 🌡어제보다 ${Math.abs(tempDiff).toFixed(1)}℃ ${tempDiff>0 ? '↑' : '↓'}
 🌫미세 : ${getPmImoticon(this.props.dust.pm10Value, 0)}(${getPmCondition(this.props.dust.pm10Value, 0)}:${this.props.dust.pm10Value}㎍/m³)
 🌫초미세 : ${getPmImoticon(this.props.dust.pm25Value, 1)}(${getPmCondition(this.props.dust.pm25Value, 1)}:${this.props.dust.pm25Value}㎍/m³)
-자외선이 강한 날이에요. 반팔 입고 꼭 썬크림 바르세요!`,
+${this.state.comment}`,
         });
         if (result.action === Share.sharedAction) {
             if (result.activityType) {
@@ -94,12 +98,33 @@ class HomeScreen extends Component {
     }
 
     openGeoScreen = () => {
-        this.props.navigation.push('Geo')
+        //this.props.navigation.push('Geo')
+        //미완성이라서 임시로 비활성화 시켜놓음
+    }
+
+    openWhoScreen = () => {
+        this.props.navigation.push('Who')
+    }
+
+    openBiasScreen = () => {
+        this.props.navigation.push('Bias')
     }
     /*
     openDonateScreen = () => {
         this.props.navigation.push('Donate')
     }*/
+    componentWillMount = () => {
+        const {weather1, dust, weather0} = this.props
+        mycomment = getComment(
+            weather1.precip, 
+            weather1.icon, 
+            dust.pm10Value,
+            weather1.tempMax,
+            weather0.tempMax,
+            weather1.tempMin,
+        )
+        this.setState({comment : mycomment})
+    }
 
     onPowerLongPress = () => {
         if(data.state.dev) {
@@ -196,7 +221,7 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const {address, currentWeather, weather1, weather0, dust, weekWeather, hourlyWeather} = this.props;
+        const {address, currentWeather, weather1, weather2, weather0, dust, dist, weekWeather, currentGender, currentBias} = this.props;
         const compBg = 'rgba(10, 10, 10, 0.3)'
 
         const wrapper_phase1 = (this.state.phase_0 != true) ? {
@@ -213,8 +238,11 @@ class HomeScreen extends Component {
                 <Drawer
                     ref={(ref)=>this._drawer = ref}
                     content={
-                    <DrawerPanel 
-                        //onDonatePress={this.openDonateScreen}
+                    <DrawerPanel
+                        onSetCurrentGender={this.props.onSetCurrentGender}
+                        onWhoButtonPress={this.openWhoScreen}
+                        onBiasButtonPress={this.openBiasScreen}
+                        gender={currentGender}
                     />}
                     openDrawerOffset={0.4}
                     tapToClose={true}
@@ -261,7 +289,10 @@ class HomeScreen extends Component {
                                     />
                                     {(this.state.phase_0!=true)&&(
                                         <View style={styles.detailContinaer}>
-                                            <View style={{width:"100%",flexDirection:"row", height:"13%", marginTop:"10%",borderBottomColor:'#E2E2E2', borderBottomWidth:6, marginBottom:"0.7%"}}>
+                                            <Text style={{height:"8%", fontSize:17, fontFamily:'Bongodik-Medium', color:'#000000'}}>
+                                                {this.state.comment}
+                                            </Text>
+                                            <View style={{width:"100%",flexDirection:"row", height:"10%", marginTop:"10%",borderBottomColor:'#E2E2E2', borderBottomWidth:6, marginBottom:"0.7%"}}>
                                                 <View style={{height:"85%", flex:1, alignItems:'center', justifyContent:'center'}}>
                                                     <Text style={styles.detailCompTitle}>
                                                         습도
@@ -287,13 +318,13 @@ class HomeScreen extends Component {
                                                     </Text>
                                                 </View>
                                             </View>
-                                            <View style={{height:"4%"}}></View>
+                                            <View style={{height:"3%"}}></View>
                                             <View style={{flexDirection:'row', height : "6%", width:"88%", alignItems:'center', justifyContent:'center'}}>
                                                 <Text style={{height:"50%", width:"23%", fontSize:13, fontFamily:"Bongodik-Regular", color:'#707070'}}>
                                                     미세먼지
                                                 </Text>
                                                 <View style={{height:"50%", width:Math.min(dust.pm10Value, 150) / 150 * 77 + "%", backgroundColor:getPmColor(dust.pm10Value,0), justifyContent:'center', paddingLeft:"0.5%"}}>
-                                                    <Text style={{color:'white', fontSize:13}}>
+                                                    <Text style={{color:'white', fontSize:13, width:"90%", textAlign:"right"}}>
                                                         {dust.pm10Value}
                                                     </Text>
                                                 </View>
@@ -304,23 +335,75 @@ class HomeScreen extends Component {
                                                 <Text style={{height:"50%", width:"23%", fontSize:13, fontFamily:"Bongodik-Regular", color:'#707070'}}>
                                                     초미세먼지
                                                 </Text>
-                                                <View style={{height:"50%", width:Math.min(dust.pm25Value, 150) / 150 * 77 + "%", backgroundColor:getPmColor(dust.pm25Value,1), justifyContent:'center', paddingLeft:"0.5%"}}>
-                                                    <Text style={{color:'white', fontSize:13}}>
+                                                <View style={{justifyContent:'center', height:"50%", width:Math.min(dust.pm25Value, 150) / 150 * 77 + "%", backgroundColor:getPmColor(dust.pm25Value,1), paddingLeft:"0.5%"}}>
+                                                    <Text style={{color:'white', fontSize:13, width:"90%", textAlign:"right"}}>
                                                         {dust.pm25Value}
                                                     </Text>
                                                 </View>
                                                 <View style={{height:"50%", width:Math.max((150 - dust.pm25Value), 0) / 150 * 77 + "%", backgroundColor:'#EFEFEF'}}>
                                                 </View>
                                             </View>
-                                            <TempChart
-                                                style={{height:"40%"}}
-                                                data = {hourlyWeather}
-                                            />
+                                            <View style={styles.quadra}>
+                                                <View style={styles.quadraRow}>
+                                                    <View style={styles.quadraItem}>
+                                                        <Text style={styles.quadraItemText}>
+                                                            체감온도
+                                                        </Text>
+                                                        <Text style={[styles.quadraItemText, styles.quadraItemTextMedium]}>
+                                                            {currentWeather.currentTempApparent.toFixed(1)}℃
+                                                        </Text>
+                                                    </View>
+                                                    <View style={{width:"6%"}}/>
+                                                    <View style={styles.quadraItem}>
+                                                        <Text style={styles.quadraItemText}>
+                                                            미세먼지 측정소
+                                                        </Text>
+                                                        <Text style={[styles.quadraItemText, styles.quadraItemTextMedium]}>
+                                                            {dist.name}
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                                <View style={styles.quadraRow}>
+                                                    <View style={styles.quadraItem}>
+                                                        <Text style={styles.quadraItemText}>
+                                                            불쾌지수
+                                                        </Text>
+                                                        <Text style={[styles.quadraItemText, styles.quadraItemTextMedium]}>
+                                                        {getDiscomfortGrade(currentWeather.currentTemp, currentWeather.currentHum)} {getDiscomfort(currentWeather.currentTemp, currentWeather.currentHum).toFixed(1)}
+                                                        </Text>
+                                                    </View>
+                                                    <View style={{width:"6%"}}/>
+                                                    <View style={styles.quadraItem}>
+                                                        <Text style={styles.quadraItemText}>
+                                                            측정소까지 거리
+                                                        </Text>
+                                                        <Text style={[styles.quadraItemText, styles.quadraItemTextMedium]}>
+                                                            {dist.dist}km
+                                                        </Text>
+                                                    </View>
+                                                </View>
+                                            </View>
                                         </View>
                                     )}
                                     {(this.state.phase_0==true)&&(
                                     <View style={styles.wrapperInner}>
-                                        <Closet/>
+                                        <View style={[styles.compContainer, {marginBottom:"5.2%"}]}>
+                                            <View style={[styles.compTitleContainer, {height:"2%"}]}>
+                                                <Text style={styles.compTitle}/>
+                                            </View>
+                                            <View style={[styles.compCompContainer, {height : 390}]}>
+                                                <TodayCloth 
+                                                    temp={currentWeather.currentTemp}
+                                                    humidity={currentWeather.currentHum}
+                                                    bias={currentBias}
+                                                    sun={1 - currentWeather.currentCc}
+                                                    gender={currentGender}
+                                                    pm10Value={dust.pm10Value}
+                                                    icon={currentWeather.icon}
+                                                    tempYest={weather0.temp}
+                                                />
+                                            </View>
+                                        </View>
                                         <View style={styles.compContainer}>
                                             <View style={styles.compTitleContainer}>
                                                 <Text style={styles.compTitle}>
@@ -328,9 +411,27 @@ class HomeScreen extends Component {
                                                 </Text>
                                             </View>
                                             <View style={styles.compCompContainer}>
-                                                <MiniWeather bg={compBg}/>
+                                                <MiniWeather 
+                                                    bg={compBg}
+                                                    icon={weather1.icon}
+                                                    tempMin={weather1.tempMin}
+                                                    tempMax={weather1.tempMax}
+                                                    hum={weather1.humidity}
+                                                    bias={currentBias}
+                                                    sun={1 - weather1.cloudCover}
+                                                    gender={currentGender}
+                                                />
                                                 <View style={{width:"2%"}}></View>
-                                                <MiniWeather bg={compBg}/>
+                                                <MiniWeather 
+                                                    bg={compBg}
+                                                    icon={weather2.icon}
+                                                    tempMin={weather2.tempMin}
+                                                    tempMax={weather2.tempMax}
+                                                    hum={weather2.humidity}
+                                                    bias={currentBias}
+                                                    sun={1 - weather2.cloudCover}
+                                                    gender={currentGender}
+                                                />
                                             </View>
                                         </View>
                                         <View style={styles.compContainer}>
@@ -372,7 +473,7 @@ const styles = StyleSheet.create({
     },
     wrapper : {
         width: "100%",
-        paddingTop : "8%",
+        paddingTop : "5%",
         alignItems: "center",
         paddingBottom : "8%",
     },
@@ -436,6 +537,34 @@ const styles = StyleSheet.create({
         fontSize : 13,
         margin:"10%",
         fontWeight : 'bold',
+    },
+    quadra : {
+        width:"100%",
+        height : "25%",
+        marginTop : "8%",
+        alignItems : 'center',
+        justifyContent : 'center',
+    },
+    quadraRow : {
+        flexDirection : 'row',
+        height : "50%",
+        width : "82%",
+    },
+    quadraItem : {
+        borderLeftColor : '#D4D5D5',
+        borderLeftWidth : 2.5,
+        height : "70%",
+        width : "47%",
+        paddingLeft : "2%",
+        justifyContent : 'center',
+    },
+    quadraItemText : {
+        fontSize : 13,
+        height : "50%",
+    },
+    quadraItemTextMedium : {
+        fontFamily : 'Bongodik-Medium',
+        color : '#000000'
     }
 })
 
@@ -452,11 +581,13 @@ const mapStateToProps = state => {
         currentGender : state.current.currentGender,
         currentWeather : state.current.currentWeather,
         dust : state.dust.dust,
+        dist : state.dust.dist,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
+        onSetCurrentGender : (currentGender) => dispatch(setCurrentGender(currentGender)),
     }
 }
 
