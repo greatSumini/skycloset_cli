@@ -116,10 +116,9 @@ class SplashScreen extends Component {
         // 임시 2019_06_18
         AsyncStorage.setItem('gender', 'm')
         AsyncStorage.setItem('bias', '0')
-        this.props.onSetCurrentGender('f')
+        this.props.onSetCurrentGender('m')
         this.props.onSetCurrentBias(0)
         this.setState({UserInfoPrepared : true})
-        console.log(this.state)
     }
 
     onFemalePress = () => {
@@ -466,19 +465,7 @@ class SplashScreen extends Component {
                                 </View>
                             </TouchableWithoutFeedback>
                         </View>
-                        <View style={{height:"4%"}}></View>{/*
-                        {(!this.state.selecteGender) && (
-                            <View style={{height:"10%"}}></View>
-                        )}
-                        {(this.state.selecteGender) && (
-                            <Button 
-                                style={{height:"10%", borderRadius:0, backgroundColor:"#0F77ED", 
-                                borderColor : '#0F77ED'}} 
-                                textStyle={{color:"white"}}
-                                onPress={this.onSubmitPress}>
-                                시작하기!
-                            </Button>
-                        )}*/}
+                        <View style={{height:"4%"}}></View>
                     </Animated.View>
                     )}
                 </Animated.View>

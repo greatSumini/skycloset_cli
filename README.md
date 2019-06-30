@@ -1,4 +1,4 @@
-# \[ 🚧 Work in progress 👷‍♀️⛏👷🔧 🚧 \] SkyCloset 1.0 
+# \[ 🚧 Work in progress 👷‍♀️⛏👷🔧 🚧 \] SkyCloset 2.1 
 <p>
   <img src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/orange-mush/skycloset_cli#readme">
@@ -21,9 +21,14 @@
 
 > React-Native based / For Android only
 
+- [수정] 날씨별 comment 다양화
+- [추가] 내 체감온도 설정 기능 
+- [수정] 일부 해상도의 margin, 배치 관련 issue 해결
+- [추가] 후원하기 기능 및 광고
+
 ---
 
-# SkyCloset 1.0
+# SkyCloset 2.0
 
 <img src="screenshots/skycloset_splash.gif" width="300" align="right" hspace="20">
 
@@ -31,7 +36,7 @@
 
 'Skycloset' is a closest MD which makes your day pleasant. At the beginning of the day, it gives brief weather information and recommends clothes with the appropriate thickness for today's wear. You can check this by time zone. Also, at the end of the day, this app receives satisfaction from the day and grows every day to suit you better.
 
-**[Install on Google Play (Beta Testing)](https://play.google.com/apps/testing/io.plaidapp)**
+**[Install on Google Play](https://play.google.com/store/apps/details?id=com.skycloset)**
 (링크 변경해야함)
 
 
@@ -65,7 +70,7 @@ Skycloset is a small project for Demoday of CEOS, so it has limited manpower and
 4. [SGIS Open API](https://sgis.kostat.go.kr/developer/html/home.html)
 
 
-### CITATIONS
+### Citations
 1. [논문 : 기후변화와 관광수요 관계에 관한 연구: 기후쾌적성을 중심으로](http://kiss.kstudy.com/thesis/thesis-view.asp?key=3506533)
 2. [논문 : 의복의 쾌적성 평가를 위한 상반신에서의 의복기후분포](http://kiss.kstudy.com/thesis/thesis-view.asp?key=3337257)
 3. [논문 : 사무실에서 작업시 의복의 쾌적성 평가를 위한 의복기후의 계절변화 측정](http://kiss.kstudy.com/thesis/thesis-view.asp?key=1926054)

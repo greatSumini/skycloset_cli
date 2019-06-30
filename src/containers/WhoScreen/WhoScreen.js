@@ -37,7 +37,7 @@ export default class WhoScreen extends Component {
                         </Text>
                         <View style={{flex:1}}/>
                     </View>
-                    <Text style={{fontSize:13, textAlign:'center'}}>
+                    <Text style={{fontSize:13, textAlign:'center', height:Dimensions.get('window').height * 0.20}}>
                         하늘 옷장은 세계보건기구(WHO) 기준을 사용하며{'\n'}
                         한국환경공단(AirKorea) 기준과는{'\n'}
                         무관하다는 것을 말씀드립니다.{'\n'}
