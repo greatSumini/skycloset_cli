@@ -24,7 +24,7 @@ export const getComment = (precip, icon, pm10Value, tempMax, tempYestMax, tempMi
     }
     if(icon == 'snow') {
         const comments = [
-            '엘사가 화났다',
+            '렛잇고~ 렛잇고~~',
             '올라프 : 내 몸이 커지고 있어~',
         ]
         return getRandomCommet(comments)
