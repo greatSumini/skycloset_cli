@@ -37,7 +37,6 @@
 'Skycloset' is a closest MD which makes your day pleasant. At the beginning of the day, it gives brief weather information and recommends clothes with the appropriate thickness for today's wear. You can check this by time zone. Also, at the end of the day, this app receives satisfaction from the day and grows every day to suit you better.
 
 **[Install on Google Play](https://play.google.com/store/apps/details?id=com.skycloset)**
-(링크 변경해야함)
 
 
 ### Made by
